@@ -4,7 +4,6 @@ import { NotifyAPI } from '../api';
 export class Index extends React.Component {
     createChannel() {
         NotifyAPI.registerChannel().then((channelId) => {
-            console.log(channelId);
             (this.props as any).history.push(`/c/${channelId}`);
         });
     }

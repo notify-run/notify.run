@@ -40,7 +40,7 @@ def subscribe(channel_id):
 def qr(channel_id):
     buffer = BytesIO()
     QRCode(URL_BASE + '/' + channel_id).svg(buffer, 6)
-    return Response(buffer.getvalue(), mimetype='image/svg+xml')
+    return Response(buffer.getvalue().decode('utf-8'), mimetype='text/xml')
 
 
 @app.route('/<channel_id>', methods=['GET'])

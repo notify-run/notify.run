@@ -37,7 +37,7 @@ export class ChannelPage extends React.Component<any, any> {
 
             <p><a href="#" onClick={this.enableNotify.bind(this)}>enable notifications on this device</a></p>
 
-            <img src={NotifyAPI.getURLOfQR(this.state.channelId)} />
+            <embed type="image/svg+xml" src={NotifyAPI.getURLOfQR(this.state.channelId)} />
 
             <p>Messages:</p>
 

@@ -11,7 +11,6 @@ export class SubscriptionManager {
     /*
     requestPermission() {
         Notification.requestPermission().then(function (result) {
-            console.log(result);
         });
     }
     */
@@ -26,7 +25,6 @@ export class SubscriptionManager {
                 return registration.pushManager.subscribe(subscribeOptions);
             })
             .then((pushSubscription) => {
-                console.log('Received PushSubscription: ', JSON.stringify(pushSubscription));
                 NotifyAPI.subscribe(channelId, pushSubscription);
                 return pushSubscription;
             });
