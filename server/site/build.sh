@@ -3,7 +3,7 @@
 set -e
 
 echo "Installing environment."
-yarn install
+npm install
 
 if [ -f .env ]; then
     echo "Loading .env file."
