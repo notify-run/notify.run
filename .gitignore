@@ -8,3 +8,4 @@ __pycache__
 node_modules
 server/site/dist
 .env.prod
+.DS_store
