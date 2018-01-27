@@ -1,0 +1,12 @@
+{
+  "name": "notify-run-server",
+  "version": "0.0.1",
+  "description": "",
+  "keywords": [],
+  "author": "Paul Butler <notify.run@paulbutler.org>",
+  "license": "MIT",
+  "devDependencies": {
+    "serverless-python-requirements": "^3.3.0",
+    "serverless-wsgi": "^1.4.4"
+  }
+}

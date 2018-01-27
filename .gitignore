@@ -1,0 +1,9 @@
+.vscode
+.mypy_cache
+.env
+yarn.lock
+server/venv
+__pycache__
+.serverless
+node_modules
+server/site/dist

@@ -1,0 +1,83 @@
+service: serverless-flask
+
+plugins:
+  - serverless-python-requirements
+  - serverless-wsgi
+
+custom:
+  messageTableName: 'message-table-${self:provider.stage}'
+  channelTableName: 'channel-table-${self:provider.stage}'
+  wsgi:
+    app: notify_run_server.app
+    packRequirements: false
+  pythonRequirements:
+    dockerizePip: non-linux
+
+provider:
+  name: aws
+  runtime: python3.6
+  stage: dev
+  region: us-east-1
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource:
+        - { "Fn::GetAtt": ["MessageTable", "Arn" ] }
+        - { "Fn::GetAtt": ["ChannelTable", "Arn" ] }
+  environment:
+    MESSAGE_TABLE: ${self:custom.messageTableName}
+    CHANNEL_TABLE: ${self:custom.channelTableName}
+
+
+functions:
+  app:
+    handler: wsgi.handler
+    events:
+      - http: ANY /
+      - http: 'ANY {proxy+}'
+
+resources:
+  Resources:
+    ChannelTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: channelId
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: channelId
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:custom.channelTableName}
+
+    MessageTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: channelId
+            AttributeType: S
+          -
+            AttributeName: messageTime
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: channelId
+            KeyType: HASH
+          -
+            AttributeName: messageTime
+            KeyType: RANGE
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:custom.messageTableName}
