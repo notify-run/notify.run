@@ -1,11 +1,13 @@
 import os
 
 from datetime import datetime
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, Response
 from flask_cors import CORS
+from pyqrcode import QRCode
+from io import BytesIO
 
 from notify_run_server.model import NotifyModel, NoSuchChannel
-from notify_run_server.params import VAPID_PUBKEY
+from notify_run_server.params import VAPID_PUBKEY, URL_BASE
 from notify_run_server.notify import notify
 
 app = Flask(__name__)
@@ -32,6 +34,13 @@ def register_channel():
 def subscribe(channel_id):
     model.add_subscription(channel_id, request.get_json())
     return '{}'
+
+
+@app.route('/<channel_id>/qr.svg', methods=['GET'])
+def qr(channel_id):
+    buffer = BytesIO()
+    QRCode(URL_BASE + '/' + channel_id).svg(buffer, 6)
+    return Response(buffer.getvalue(), mimetype='image/svg+xml')
 
 
 @app.route('/<channel_id>', methods=['GET'])

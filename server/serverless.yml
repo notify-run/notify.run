@@ -16,7 +16,6 @@ custom:
 provider:
   name: aws
   runtime: python3.6
-  stage: dev
   region: us-east-1
   iamRoleStatements:
     - Effect: Allow
@@ -33,6 +32,10 @@ provider:
   environment:
     MESSAGE_TABLE: ${self:custom.messageTableName}
     CHANNEL_TABLE: ${self:custom.channelTableName}
+    NOTIFY_VAPID_PRIVKEY: ${env:NOTIFY_VAPID_PRIVKEY}
+    NOTIFY_VAPID_PUBKEY: ${env:NOTIFY_VAPID_PUBKEY}
+    NOTIFY_VAPID_EMAIL: ${env:NOTIFY_VAPID_EMAIL}
+    NOTIFY_URL_BASE: ${env:NOTIFY_URL_BASE}
 
 
 functions:

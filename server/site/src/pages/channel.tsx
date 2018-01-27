@@ -18,7 +18,7 @@ export class ChannelPage extends React.Component<any, any> {
     componentDidMount() {
         this.subscriptionManager = new SubscriptionManager();
 
-        NotifyAPI.getMessages(this.state.channelId).then((messages) => {
+        NotifyAPI.fetchMessages(this.state.channelId).then((messages) => {
             this.setState({ messages });
         })
     }
@@ -36,6 +36,8 @@ export class ChannelPage extends React.Component<any, any> {
             <p>curl {NotifyAPI.API_SERVER}/{this.state.channelId} -d "message goes here"</p>
 
             <p><a href="#" onClick={this.enableNotify.bind(this)}>enable notifications on this device</a></p>
+
+            <img src={NotifyAPI.getURLOfQR(this.state.channelId)} />
 
             <p>Messages:</p>
 

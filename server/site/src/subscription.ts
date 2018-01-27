@@ -5,7 +5,7 @@ export class SubscriptionManager {
     pubKey: string = '';
 
     constructor() {
-        NotifyAPI.getPubkey().then((pk) => this.pubKey = pk);
+        NotifyAPI.fetchPubkey().then((pk) => this.pubKey = pk);
     }
 
     /*

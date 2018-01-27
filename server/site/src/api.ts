@@ -24,11 +24,15 @@ export namespace NotifyAPI {
         return request(`/${channelId}/subscribe`, req);
     }
 
-    export function getPubkey(): Promise<string> {
+    export function fetchPubkey(): Promise<string> {
         return request('/api/pubkey').then((c) => c.pubKey);
     }
 
-    export function getMessages(channelId: string): Promise<Message[]> {
+    export function fetchMessages(channelId: string): Promise<Message[]> {
         return request(`/${channelId}`);
+    }
+
+    export function getURLOfQR(channelId: string): string {
+        return `${API_SERVER}/${channelId}/qr.svg`;
     }
 }

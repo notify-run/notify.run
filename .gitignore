@@ -7,3 +7,4 @@ __pycache__
 .serverless
 node_modules
 server/site/dist
+.env.prod
