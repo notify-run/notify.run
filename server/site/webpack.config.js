@@ -3,10 +3,13 @@ const path = require('path');
 
 module.exports = {
     context: path.resolve('src'),
-    entry: './app.tsx',
+    entry: {
+        app: './app.tsx',
+        quickstart: './quickstart.tsx',
+    },
     output: {
         path: path.resolve('dist'),
-        filename: 'bundle.js'
+        filename: '[name].js'
     },
     devtool: "source-map",
     plugins: [

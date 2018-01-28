@@ -8,13 +8,6 @@ export class SubscriptionManager {
         NotifyAPI.fetchPubkey().then((pk) => this.pubKey = pk);
     }
 
-    /*
-    requestPermission() {
-        Notification.requestPermission().then(function (result) {
-        });
-    }
-    */
-
     subscribe(channelId: string) {
         return navigator.serviceWorker.register('/service-worker.js')
             .then((registration) => {
