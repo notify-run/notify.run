@@ -16,7 +16,9 @@ export class ChannelPage extends React.Component<any, any> {
     }
 
     componentDidMount() {
-        this.subscriptionManager = new SubscriptionManager();
+        NotifyAPI.fetchPubkey().then((k) => {
+            this.subscriptionManager = new SubscriptionManager(k);
+        });
 
         NotifyAPI.fetchMessages(this.state.channelId).then((messages) => {
             this.setState({ messages });

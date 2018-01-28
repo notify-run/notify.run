@@ -5,14 +5,39 @@ import { SubscriptionManager } from '../subscription';
 interface SubscribeStageProps {
     onChannelReady: () => void;
     channelId: string;
+    pubKey: string;
 }
 
-export class SubscribeStage extends React.Component<SubscribeStageProps, {}> {
+interface SubscribeStageState {
+    subscribed: boolean,
+    supported: boolean,
+    err?: Error,
+}
+
+export class SubscribeStage extends React.Component<SubscribeStageProps, SubscribeStageState> {
     subscriptionManager: SubscriptionManager;
 
     constructor(props: SubscribeStageProps) {
         super(props);
-        this.subscriptionManager = new SubscriptionManager();
+
+        this.subscriptionManager = new SubscriptionManager(this.props.pubKey);
+
+        this.state = {
+            subscribed: false,
+            supported: this.subscriptionManager.checkBrowserSupport()
+        };
+    }
+
+    onSubscribe() {
+        this.subscriptionManager.subscribe(this.props.channelId).then(() => {
+            this.setState({
+                subscribed: true,
+            })
+        }).catch((e: Error) => {
+            this.setState({
+                err: e
+            });
+        });
     }
 
     render() {
@@ -27,18 +52,41 @@ export class SubscribeStage extends React.Component<SubscribeStageProps, {}> {
                         to your channel. If multiple devices are subscribed to the same channel,
                         they will all receive notifications.
                     </p>
-                    <p>
-                        Use the button below to subscribe on <em>this</em> device. To subscribe on a <em>different</em> device, open the URL below
-                        or scan this QR code.
-                    </p>
+                    {
+                        this.state.supported ?
+                            <p>Use the button below to subscribe on <em>this</em> device. To subscribe on
+                                a <em>different</em> device, open the URL below or scan this QR code.
+                                </p> :
+                            <p>The device or browser you are using does not support the Web Push API, but you can
+                                    receive notifications on another device by opening the URL below or scanning the
+                                    QR code.
+                                </p>
+                    }
+
                     <pre>https://notify.run/{this.props.channelId}</pre>
-                    <button className="ui primary button">Subscribe on this device</button>
-                    <button onClick={this.props.onChannelReady} className="ui button">Continue</button>
+                    {
+                        this.state.supported ? (
+                            this.state.subscribed ?
+                                <button onClick={this.onSubscribe.bind(this)}
+                                    className="ui button disabled">Subscribed</button> :
+                                <button onClick={this.onSubscribe.bind(this)}
+                                    className="ui primary button">Subscribe on this device</button>
+                        ) : ''
+                    }
+
+                    <button onClick={this.props.onChannelReady} className={'ui button' + (this.state.subscribed || !this.state.supported ? ' primary' : '')}>Continue</button>
                 </div>
                 <div className="seven wide column">
                     <embed type="image/svg+xml" src={`https://notify.run/${this.props.channelId}/qr.svg`} />
                 </div>
             </div>
+            {
+                this.state.err ?
+                    <div className="ui negative message">
+                        <div className="header">{this.state.err.name}</div>
+                        <p>{this.state.err.message}</p>
+                    </div> : ''
+            }
         </div>;
     }
 }

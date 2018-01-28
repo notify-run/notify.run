@@ -1,5 +1,6 @@
 
 export type Message = { channelId: string, message: string, time: string };
+export type RegisterChannelResponse = { channelId: string, pubKey: string };
 
 export namespace NotifyAPI {
     export const API_SERVER = process.env.NOTIFY_API_SERVER;
@@ -8,8 +9,8 @@ export namespace NotifyAPI {
         return fetch(API_SERVER + path, requestInit).then((c) => c.json());
     }
 
-    export function registerChannel(): Promise<string> {
-        return request('/api/register_channel', { method: 'POST' }).then((c) => c.channelId);
+    export function registerChannel(): Promise<RegisterChannelResponse> {
+        return request('/api/register_channel', { method: 'POST' });
     }
 
     export function subscribe(channelId: string, subscription: any): Promise<any> {

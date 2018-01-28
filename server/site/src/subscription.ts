@@ -2,13 +2,19 @@ import { NotifyAPI } from './api';
 import { urlB64ToUint8Array } from './util';
 
 export class SubscriptionManager {
-    pubKey: string = '';
+    constructor(private pubKey: string) { }
 
-    constructor() {
-        NotifyAPI.fetchPubkey().then((pk) => this.pubKey = pk);
+    checkBrowserSupport(): boolean {
+        return (('Notification' in window) &&
+            ('serviceWorker' in navigator) &&
+            ('PushManager' in window));
     }
 
-    subscribe(channelId: string) {
+    checkPermission(): boolean {
+        return (Notification as any).permission !== 'denied';
+    }
+
+    subscribe(channelId: string): Promise<void> {
         return navigator.serviceWorker.register('/service-worker.js')
             .then((registration) => {
                 const subscribeOptions = {
@@ -19,7 +25,6 @@ export class SubscriptionManager {
             })
             .then((pushSubscription) => {
                 NotifyAPI.subscribe(channelId, pushSubscription);
-                return pushSubscription;
             });
     }
 }

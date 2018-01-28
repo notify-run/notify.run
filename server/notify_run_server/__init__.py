@@ -27,7 +27,7 @@ def register_channel():
         'ip': request.remote_addr,
         'agent': request.headers.get('User-Agent')
     })
-    return jsonify({'channelId': channelId})
+    return jsonify({'channelId': channelId, 'pubKey': VAPID_PUBKEY})
 
 
 @app.route('/<channel_id>/subscribe', methods=['POST'])
