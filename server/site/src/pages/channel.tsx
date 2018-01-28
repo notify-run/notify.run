@@ -35,7 +35,7 @@ export class ChannelPage extends React.Component<any, any> {
 
             <p>To send the channel a message, run this command:</p>
 
-            <p>curl {NotifyAPI.API_SERVER}/{this.state.channelId} -d "message goes here"</p>
+            <p>curl /{this.state.channelId} -d "message goes here"</p>
 
             <p><a href="#" onClick={this.enableNotify.bind(this)}>enable notifications on this device</a></p>
 

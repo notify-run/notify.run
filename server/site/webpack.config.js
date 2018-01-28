@@ -13,7 +13,10 @@ module.exports = {
     },
     devtool: "source-map",
     plugins: [
-        new webpack.EnvironmentPlugin(['NOTIFY_API_SERVER']),
+        new webpack.EnvironmentPlugin([
+            'NOTIFY_API_SERVER',
+            'NOTIFY_WEB_SERVER',
+        ]),
     ],
     resolve: {
         extensions: [".ts", ".tsx", ".js", ".json"]
@@ -26,7 +29,7 @@ module.exports = {
     devServer: {
         contentBase: path.join(__dirname, 'static'),
         historyApiFallback: {
-            index: 'index.html'
+            index: '/c/index.html'
         }
     }
 }

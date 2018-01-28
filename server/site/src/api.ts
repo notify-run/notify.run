@@ -1,12 +1,11 @@
+import { Config } from './config';
 
 export type Message = { channelId: string, message: string, time: string };
 export type RegisterChannelResponse = { channelId: string, pubKey: string };
 
 export namespace NotifyAPI {
-    export const API_SERVER = process.env.NOTIFY_API_SERVER;
-
     function request(path: string, requestInit?: {}) {
-        return fetch(API_SERVER + path, requestInit).then((c) => c.json());
+        return fetch(Config.API_SERVER + path, requestInit).then((c) => c.json());
     }
 
     export function registerChannel(): Promise<RegisterChannelResponse> {
@@ -34,6 +33,6 @@ export namespace NotifyAPI {
     }
 
     export function getURLOfQR(channelId: string): string {
-        return `${API_SERVER}/${channelId}/qr.svg`;
+        return `${Config.API_SERVER}/${channelId}/qr.svg`;
     }
 }

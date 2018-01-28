@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import { SubscriptionManager } from '../subscription';
+import { Config } from '../config';
 
 interface SubscribeStageProps {
     onChannelReady: () => void;
@@ -63,7 +64,7 @@ export class SubscribeStage extends React.Component<SubscribeStageProps, Subscri
                                 </p>
                     }
 
-                    <pre>https://notify.run/{this.props.channelId}</pre>
+                    <pre>{Config.WEB_SERVER}/c/{this.props.channelId}</pre>
                     {
                         this.state.supported ? (
                             this.state.subscribed ?
@@ -77,7 +78,7 @@ export class SubscribeStage extends React.Component<SubscribeStageProps, Subscri
                     <button onClick={this.props.onChannelReady} className={'ui button' + (this.state.subscribed || !this.state.supported ? ' primary' : '')}>Continue</button>
                 </div>
                 <div className="seven wide column">
-                    <embed type="image/svg+xml" src={`https://notify.run/${this.props.channelId}/qr.svg`} />
+                    <embed type="image/svg+xml" src={`${Config.API_SERVER}/${this.props.channelId}/qr.svg`} />
                 </div>
             </div>
             {

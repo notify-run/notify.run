@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Config } from '../config';
 
 interface CompletedStageProps {
     channelId: string;
@@ -6,6 +7,8 @@ interface CompletedStageProps {
 
 export class CompletedStage extends React.Component<CompletedStageProps, {}> {
     render() {
+        let channelLink = `${Config.WEB_SERVER}/c/${this.props.channelId}`;
+        let channelEndpoint = `${Config.API_SERVER}/${this.props.channelId}`
         return <div>
             <p>
                 <strong>Your channel is ready to be used!</strong>
@@ -13,17 +16,17 @@ export class CompletedStage extends React.Component<CompletedStageProps, {}> {
             <p>
                 To send a message with <samp>curl</samp>, run the following command in a terminal:
             </p>
-            <pre>$ curl https://notify.run/{this.props.channelId} -d "Hello from notify.run"</pre>
+            <pre>$ curl {channelEndpoint} -d "Hello from notify.run"</pre>
             <p>
                 If you have <samp>pip</samp>, you can also install and run the <samp>notify-run</samp> package
                 and use the command-line interface:
             </p>
             <pre>{`$ pip install notify-run
-$ notify-run -c https://notify.run/${this.props.channelId}
+$ notify-run -c ${channelEndpoint}
 $ notify-run "Hello from notify.run"`}</pre>
             <p>
                 You can always
-                visit <a style={{ fontWeight: 'bold' }} href={`https://notify.run/${this.props.channelId}`}>https://notify.run/{this.props.channelId}</a> to
+                visit <a style={{ fontWeight: 'bold' }} href={channelLink}>{channelLink}</a> to
                 view a log of recent messages or subscribe new devices.
             </p>
         </div>;
