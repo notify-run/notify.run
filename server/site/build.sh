@@ -35,6 +35,6 @@ mkdir -p public/
 cp -R dist/* static/* public/
 
 echo "Generating redirects file."
-echo "/c/* /index.html 200" >> public/_redirects
+echo "/c/* /channel.html 200" >> public/_redirects
 echo "/* ${NOTIFY_API_PROXY}/:splat 200" >> public/_redirects
 
