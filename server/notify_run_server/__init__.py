@@ -6,7 +6,7 @@ from flask_cors import CORS
 from pyqrcode import QRCode
 from io import BytesIO
 
-from notify_run_server.model import NotifyModel, NoSuchChannel
+from notify_run_server.model import NotifyModel  # , NoSuchChannel
 from notify_run_server.params import VAPID_PUBKEY, URL_BASE
 from notify_run_server.notify import notify
 
@@ -27,7 +27,7 @@ def register_channel():
         'ip': request.remote_addr,
         'agent': request.headers.get('User-Agent')
     })
-    return jsonify({'channelId': channelId, 'pubKey': VAPID_PUBKEY})
+    return jsonify({'channelId': channelId, 'pubKey': VAPID_PUBKEY, 'messages': []})
 
 
 @app.route('/<channel_id>/subscribe', methods=['POST'])
@@ -46,7 +46,12 @@ def qr(channel_id):
 @app.route('/<channel_id>', methods=['GET'])
 def get_channel(channel_id):
     try:
-        return jsonify(model.get_messages(channel_id))
+        messages = model.get_messages(channel_id)
+        return jsonify({
+            'messages': messages,
+            'channelId': channel_id,
+            'pubKey': VAPID_PUBKEY,
+        })
     except NoSuchChannel as e:
         return 'no such channel: {}'.format(e.channel_id), 404
 
@@ -55,7 +60,7 @@ def get_channel(channel_id):
 def post_channel(channel_id):
     message = request.get_data().decode('utf-8')
     channel = model.get_channel(channel_id)
-    for sub in channel['subscriptions']:
+    for sub in channel['subscriptions'].values():
         print(sub)
         notify(sub, message)
 
@@ -69,3 +74,7 @@ def post_channel(channel_id):
 @app.route("/")
 def index():
     return '{}'
+
+
+if __name__ == '__main__':
+    app.run(threaded=True)

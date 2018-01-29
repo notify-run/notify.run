@@ -3,13 +3,10 @@ const path = require('path');
 
 module.exports = {
     context: path.resolve('src'),
-    entry: {
-        app: './app.tsx',
-        quickstart: './quickstart.tsx',
-    },
+    entry: './main.tsx',
     output: {
         path: path.resolve('dist'),
-        filename: '[name].js'
+        filename: 'main.js'
     },
     devtool: "source-map",
     plugins: [
@@ -29,7 +26,7 @@ module.exports = {
     devServer: {
         contentBase: path.join(__dirname, 'static'),
         historyApiFallback: {
-            index: '/c/index.html'
+            index: '/channel.html'
         }
     }
 }

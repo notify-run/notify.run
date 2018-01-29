@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { NotifyAPI, RegisterChannelResponse } from '../api';
+import { NotifyAPI, ChannelResponse } from '../api';
 import { CreateChannelStage } from './create_channel_stage';
 import { SubscribeStage } from './subscribe_stage';
 import { CompletedStage } from './completed_stage';
@@ -28,7 +28,7 @@ export class QuickStartFlow extends React.Component<{}, QuickStartFlowState> {
             loading: true,
         });
 
-        NotifyAPI.registerChannel().then((rcr: RegisterChannelResponse) => {
+        NotifyAPI.registerChannel().then((rcr: ChannelResponse) => {
             this.setState({
                 loading: false,
                 channelId: rcr.channelId,

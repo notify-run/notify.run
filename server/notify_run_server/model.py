@@ -28,16 +28,21 @@ class NotifyModel:
             'channelId': channel_id,
             'created': str(datetime.now()),
             'meta': meta,
-            'subscriptions': [],
+            'subscriptions': {},
         })
         return channel_id
 
     def add_subscription(self, channel_id: str, subscription: dict):
+        id = subscription['id']
         self._channel_table.update_item(
             Key={'channelId': channel_id},
-            UpdateExpression='SET subscriptions = list_append(subscriptions, :new_subs)',
+            UpdateExpression='SET #s.#k = :new_sub',
+            ExpressionAttributeNames={
+                '#s': 'subscriptions',
+                '#k': id,
+            },
             ExpressionAttributeValues={
-                ':new_subs': [subscription]
+                ':new_sub': subscription['subscription']
             }
         )
 

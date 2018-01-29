@@ -1,7 +1,8 @@
 import * as React from 'react';
 
-import { SubscriptionManager } from '../subscription';
 import { Config } from '../config';
+import { SubscriptionManager } from '../subscription';
+
 
 interface SubscribeStageProps {
     onChannelReady: () => void;
@@ -64,18 +65,20 @@ export class SubscribeStage extends React.Component<SubscribeStageProps, Subscri
                                 </p>
                     }
 
-                    <pre>{Config.WEB_SERVER}/c/{this.props.channelId}</pre>
-                    {
-                        this.state.supported ? (
-                            this.state.subscribed ?
-                                <button onClick={this.onSubscribe.bind(this)}
-                                    className="ui button disabled">Subscribed</button> :
-                                <button onClick={this.onSubscribe.bind(this)}
-                                    className="ui primary button">Subscribe on this device</button>
-                        ) : ''
-                    }
-
-                    <button onClick={this.props.onChannelReady} className={'ui button' + (this.state.subscribed || !this.state.supported ? ' primary' : '')}>Continue</button>
+                    <pre>{`${Config.WEB_SERVER}/c/${this.props.channelId}\n`}</pre>
+                    <div style={{ lineHeight: 0 }}>&nbsp;</div>
+                    <p>
+                        {
+                            this.state.supported ? (
+                                this.state.subscribed ?
+                                    <button onClick={this.onSubscribe.bind(this)}
+                                        className="ui button disabled">Subscribed</button> :
+                                    <button onClick={this.onSubscribe.bind(this)}
+                                        className="ui primary button">Subscribe on this device</button>
+                            ) : ''
+                        }
+                        <button onClick={this.props.onChannelReady} className={'ui button' + (this.state.subscribed || !this.state.supported ? ' primary' : '')}>Continue</button>
+                    </p>
                 </div>
                 <div className="seven wide column">
                     <embed type="image/svg+xml" src={`${Config.API_SERVER}/${this.props.channelId}/qr.svg`} />
@@ -88,6 +91,6 @@ export class SubscribeStage extends React.Component<SubscribeStageProps, Subscri
                         <p>{this.state.err.message}</p>
                     </div> : ''
             }
-        </div>;
+        </div >;
     }
 }
