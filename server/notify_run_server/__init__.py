@@ -6,7 +6,7 @@ from flask_cors import CORS
 from pyqrcode import QRCode
 from io import BytesIO
 
-from notify_run_server.model import NotifyModel  # , NoSuchChannel
+from notify_run_server.model import NotifyModel, NoSuchChannel
 from notify_run_server.params import VAPID_PUBKEY, URL_BASE
 from notify_run_server.notify import notify
 
@@ -14,6 +14,14 @@ app = Flask(__name__)
 CORS(app)
 
 model = NotifyModel()
+
+
+def channel_page_url(channel_id):
+    return URL_BASE + '/c/' + channel_id
+
+
+def qr_for_channel(channel_id):
+    return QRCode(channel_page_url(channel_id))
 
 
 @app.route('/api/pubkey', methods=['GET'])
@@ -39,8 +47,16 @@ def subscribe(channel_id):
 @app.route('/<channel_id>/qr.svg', methods=['GET'])
 def qr(channel_id):
     buffer = BytesIO()
-    QRCode(URL_BASE + '/c/' + channel_id).svg(buffer, 6)
+    qr_for_channel(channel_id).svg(buffer, 6)
     return Response(buffer.getvalue().decode('utf-8'), mimetype='text/xml')
+
+
+@app.route('/<channel_id>/info', methods=['GET'])
+def info(channel_id):
+    model.get_channel(channel_id)
+    return jsonify({
+        'channel_page': channel_page_url(channel_id),
+    })
 
 
 @app.route('/<channel_id>', methods=['GET'])

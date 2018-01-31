@@ -50,6 +50,8 @@ class NotifyModel:
         result = self._channel_table.query(
             KeyConditionExpression=Key('channelId').eq(channel_id)
         )
+        if result['Count'] != 1:
+            raise NoSuchChannel(channel_id)
         return result['Items'][0]
 
     def _check_valid_channel(self, channel_id: str) -> bool:
@@ -76,7 +78,6 @@ class NotifyModel:
             } for item in items]
 
     def put_message(self, channel_id: str, message: str):
-        # self._assert_valid_channel(channel_id)
         self._message_table.put_item(
             Item={
                 'channelId': channel_id,
