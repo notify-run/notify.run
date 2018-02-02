@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='notify-run',
-      version='1.0',
+      version='0.0.1',
       description='Client for notify.run notifications.',
       author='Paul Butler',
       author_email='notify@paulbutler.org',

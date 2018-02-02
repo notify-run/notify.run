@@ -7,7 +7,7 @@ from pyqrcode import QRCode
 from io import BytesIO
 
 from notify_run_server.model import NotifyModel, NoSuchChannel
-from notify_run_server.params import VAPID_PUBKEY, URL_BASE
+from notify_run_server.params import VAPID_PUBKEY, API_SERVER, WEB_SERVER
 from notify_run_server.notify import notify
 
 app = Flask(__name__)
@@ -17,7 +17,11 @@ model = NotifyModel()
 
 
 def channel_page_url(channel_id):
-    return URL_BASE + '/c/' + channel_id
+    return WEB_SERVER + '/c/' + channel_id
+
+
+def channel_endpoint(channel_id):
+    return API_SERVER + '/' + channel_id
 
 
 def qr_for_channel(channel_id):
@@ -31,11 +35,17 @@ def get_pubkey():
 
 @app.route('/api/register_channel', methods=['POST'])
 def register_channel():
-    channelId = model.register_channel({
+    channel_id = model.register_channel({
         'ip': request.remote_addr,
-        'agent': request.headers.get('User-Agent')
+        'agent': request.headers.get('User-Agent'),
     })
-    return jsonify({'channelId': channelId, 'pubKey': VAPID_PUBKEY, 'messages': []})
+    return jsonify({
+        'channelId': channel_id,
+        'pubKey': VAPID_PUBKEY,
+        'messages': [],
+        'channel_page': channel_page_url(channel_id),
+        'endpoint': channel_endpoint(channel_id),
+    })
 
 
 @app.route('/<channel_id>/subscribe', methods=['POST'])
@@ -56,6 +66,7 @@ def info(channel_id):
     model.get_channel(channel_id)
     return jsonify({
         'channel_page': channel_page_url(channel_id),
+        'endpoint': channel_endpoint(channel_id),
     })
 
 

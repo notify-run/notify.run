@@ -24,7 +24,7 @@ class Notify:
             return
 
     def __init__(self, api_server=None, endpoint=None):
-        self.api_server = api_server
+        self.api_server = api_server or DEFAULT_API_SERVER
         self._config_file = expanduser(CONFIG_FILENAME)
 
         self.read_config()
@@ -58,4 +58,7 @@ class Notify:
             raise
 
     def register(self):
-        pass
+        r = requests.post(self.api_server + '/register_channel').json()
+        print(r)
+        self.endpoint = r['endpoint']
+        self.write_config()

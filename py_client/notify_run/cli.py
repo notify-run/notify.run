@@ -17,7 +17,7 @@ def info(notify):
 
 
 def register(notify, force):
-    print('register')
+    notify.register()
 
 
 def send(notify, message):
