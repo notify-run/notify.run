@@ -54,7 +54,7 @@ Using an Existing Endpoint
 
 If you want to point notify-run at an existing endpoint, for example one
 created through the `web interface <https://notify.run/>`_, you can use the
-``configure`` subcommand instead of ``register``.
+``configure`` subcommand instead of ``register``::
 
     notify-run configure <endpoint URL>
 
