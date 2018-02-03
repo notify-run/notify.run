@@ -22,9 +22,11 @@ echo "Bundling JavaScript."
 
 cp -R static-src static
 
+echo "${NOTIFY_TRACKER}" > tracker.html
+
 echo "Generating HTML files."
 gen_html() {
-    cat html-src/_header.html html-src/${1}.html html-src/_footer.html > static/${1}.html
+    cat html-src/_header.html html-src/${1}.html tracker.html html-src/_footer.html > static/${1}.html
 }
 
 gen_html index
