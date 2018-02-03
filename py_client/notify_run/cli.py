@@ -1,23 +1,30 @@
 import argparse
 
-from notify_run import Notify
+import requests
+
+from notify_run import Notify, NotConfigured
 
 
-def configure(notify, force):
+def check_existing(notify, force):
     if notify.config_file_exists and not force:
         print(
             'Overwrite existing configuration ({})? [y/N]'.format(notify.endpoint))
-        if input().lower() != 'y':
-            return
-    notify.write_config()
+        return input().lower() == 'y'
+    return True
+
+
+def configure(notify, force):
+    if check_existing(notify, force):
+        notify.write_config()
 
 
 def info(notify):
-    notify.info()
+    print(notify.info())
 
 
 def register(notify, force):
-    notify.register()
+    if check_existing(notify, force):
+        print(notify.register())
 
 
 def send(notify, message):
@@ -56,7 +63,20 @@ def main():
     endpoint = None
     if 'endpoint' in args:
         endpoint = args.pop('endpoint')
-    func = args.pop('func')
+    if 'func' in args:
+        func = args.pop('func')
+    else:
+        parser.print_usage()
+        return
     api_server = args.pop('api_server')
-    notify = Notify(api_server, endpoint)
-    func(notify, **args)
+
+    try:
+        notify = Notify(api_server, endpoint)
+        func(notify, **args)
+    except NotConfigured:
+        print('Run "notify-run register" or "notify-run configure <endpoint>" first.')
+    except ValueError as ve:
+        print(ve)
+    except requests.exceptions.ConnectionError as ce:
+        print('Error connecting. Check configuration and internet connection.')
+        print(ce)

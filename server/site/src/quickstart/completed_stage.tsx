@@ -22,8 +22,8 @@ export class CompletedStage extends React.Component<CompletedStageProps, {}> {
                 and use the command-line interface:
             </p>
             <pre>{`$ pip install notify-run
-$ notify-run -c ${channelEndpoint}
-$ notify-run "Hello from notify.run"`}</pre>
+$ notify-run configure ${channelEndpoint}
+$ notify-run send "Hello from notify.run"`}</pre>
             <p>
                 You can always
                 visit <a style={{ fontWeight: 'bold' }} href={channelLink}>{channelLink}</a> to
