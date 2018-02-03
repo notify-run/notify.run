@@ -1,8 +1,15 @@
 from setuptools import setup
 
+
+def readme():
+    with open('README.rst') as f:
+        return f.read()
+
+
 setup(name='notify-run',
-      version='0.0.1',
+      version='0.0.5',
       description='Client for notify.run notifications.',
+      long_description=readme(),
       author='Paul Butler',
       author_email='notify@paulbutler.org',
       url='https://notify.run/',
