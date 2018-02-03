@@ -2,7 +2,12 @@ import { Config } from './config';
 import { Subscription } from './subscription';
 
 export type Message = { channelId: string, message: string, time: string };
-export type ChannelResponse = { channelId: string, pubKey: string, messages?: Message[] };
+export type ChannelResponse = {
+    channelId: string,
+    pubKey: string,
+    messages?: Message[],
+    subscriptions: string[],
+};
 
 export namespace NotifyAPI {
     function request(path: string, requestInit?: {}) {

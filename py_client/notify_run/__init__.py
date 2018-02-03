@@ -42,10 +42,13 @@ class Notify:
 
     def info(self):
         r = requests.get(self.endpoint + '/info').json()
+        self.print_info(r)
+
+    def print_info(self, r):
         print('Endpoint: {}'.format(self.endpoint))
         print('To subscribe, open: {}'.format(r['channel_page']))
         print('Or scan this QR code')
-        print(QRCode(r['channel_page']).terminal())
+        print(QRCode(r['channel_page'], error='L').terminal(quiet_zone=1))
 
     def write_config(self):
         config = {
@@ -58,7 +61,7 @@ class Notify:
             raise
 
     def register(self):
-        r = requests.post(self.api_server + '/register_channel').json()
-        print(r)
+        r = requests.post(self.api_server + 'register_channel').json()
         self.endpoint = r['endpoint']
         self.write_config()
+        self.print_info(r)

@@ -63,7 +63,8 @@ def qr(channel_id):
 
 @app.route('/<channel_id>/info', methods=['GET'])
 def info(channel_id):
-    model.get_channel(channel_id)
+    channel = model.get_channel(channel_id)
+
     return jsonify({
         'channel_page': channel_page_url(channel_id),
         'endpoint': channel_endpoint(channel_id),
@@ -73,11 +74,14 @@ def info(channel_id):
 @app.route('/<channel_id>', methods=['GET'])
 def get_channel(channel_id):
     try:
+        channel = model.get_channel(channel_id)
         messages = model.get_messages(channel_id)
         return jsonify({
             'messages': messages,
             'channelId': channel_id,
             'pubKey': VAPID_PUBKEY,
+            'subscriptions': list(channel['subscriptions'].keys()),
+
         })
     except NoSuchChannel as e:
         return 'no such channel: {}'.format(e.channel_id), 404

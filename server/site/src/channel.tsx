@@ -33,7 +33,6 @@ class MessageList extends React.Component<MessageListProps, {}> {
     }
 }
 
-
 interface ChannelPageProps {
     channelId: string,
 }
@@ -41,6 +40,7 @@ interface ChannelPageProps {
 interface ChannelPageState {
     messages: Message[],
     loading: boolean,
+    subscribed: boolean,
 }
 
 export class ChannelPage extends React.Component<ChannelPageProps, ChannelPageState> {
@@ -52,6 +52,7 @@ export class ChannelPage extends React.Component<ChannelPageProps, ChannelPageSt
         this.state = {
             messages: [],
             loading: true,
+            subscribed: false,
         };
     }
 
@@ -59,7 +60,10 @@ export class ChannelPage extends React.Component<ChannelPageProps, ChannelPageSt
         NotifyAPI.fetchChannel(this.props.channelId).then((response) => {
             this.subscriptionManager = new SubscriptionManager(response.pubKey);
             this.subscriptionManager.getSubscription().then((k) => {
-                console.log(k);
+                let subscribed = (response.subscriptions.indexOf(k.id) >= 0);
+                this.setState({
+                    subscribed: subscribed,
+                });
             });
 
             this.setState({
@@ -80,7 +84,7 @@ export class ChannelPage extends React.Component<ChannelPageProps, ChannelPageSt
     onSubscribe() {
         this.subscriptionManager.subscribe(this.props.channelId).then(() => {
             this.setState({
-                //subscribed: true,
+                subscribed: true,
             })
         }).catch((e: Error) => {
             console.log(e);
@@ -93,6 +97,7 @@ export class ChannelPage extends React.Component<ChannelPageProps, ChannelPageSt
         }
 
         let channelEndpoint = `${Config.API_SERVER}/${this.props.channelId}`
+        let webLink = `${Config.WEB_SERVER}/c/${this.props.channelId}`;
         return <div>
             <h2>Channel <samp>{this.props.channelId}</samp></h2>
             <h3>Recent messages</h3>
@@ -106,8 +111,16 @@ export class ChannelPage extends React.Component<ChannelPageProps, ChannelPageSt
 
             <h3>Add Subscription</h3>
 
-            <p><button onClick={this.onSubscribe.bind(this)}
-                className="ui primary button">Subscribe on this device</button></p>
+            <p>Subscribe on this device using the button below.</p>
+            <p>{
+                this.state.subscribed ?
+                    <button
+                        className="ui disabled button">Already Subscribed</button> :
+                    <button onClick={this.onSubscribe.bind(this)}
+                        className="ui primary button">Subscribe on this device</button>
+            }
+            </p>
+            <p>Subscribe on another device by opening <a href={webLink}>{webLink}</a> or scanning the QR code below.</p>
 
             <embed type="image/svg+xml" src={NotifyAPI.getURLOfQR(this.props.channelId)} />
 
