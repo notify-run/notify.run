@@ -19,7 +19,7 @@ Configuration
 Before you use either the shell command or Python package to send notifications,
 you must configure an endpoint. Both the command-line interface and Python
 interface provide a way of creating this configuration, and the configuration is
-shared by both. The configuration is stored in a file called``.config/notify-run``
+shared by both. The configuration is stored in a file called ``.config/notify-run``
 in your home directory.
 
 Command-line Interface
