@@ -11,5 +11,8 @@ setup(name='notify-run',
           'console_scripts': [
               'notify-run = notify_run.cli:main'
           ]
-      }
+      },
+      install_requires=[
+          'PyQRCode==1.2.1',
+      ],
       )
