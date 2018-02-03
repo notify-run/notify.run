@@ -24,80 +24,79 @@
 </p>
 <p>
     notify.run uses standard APIs for both sending and subscribing to notifications, which means that it can be used without
-    installling any software.
-    <If you prefer, you can use the command-line tool and Python package to simplify integration with your workflow. </p>
+    installling any software. If you prefer, you can use the command-line tool and Python package to simplify integration
+    with your workflow.</p>
 
-        <h2>Integrations</h2>
+<h2>Integrations</h2>
 
-        <h3>Command-line interface</h3>
+<h3>Command-line interface</h3>
 
-        <p>
-            The command-line interface and Python API are part of the
-            <samp>notify-run</samp> Python package. You can install both using the
-            <samp>pip</samp> package manager
-        </p>
+<p>
+    The command-line interface and Python API are part of the
+    <samp>notify-run</samp> Python package. You can install both using the
+    <samp>pip</samp> package manager
+</p>
 
-        <pre>pip install notify-run</pre>
+<pre>pip install notify-run</pre>
 
-        <p>
-            Once it has been installed, you can register a new channel like so:
-        </p>
+<p>
+    Once it has been installed, you can register a new channel like so:
+</p>
 
-        <pre>notify-run register</pre>
+<pre>notify-run register</pre>
 
-        <p>
-            Alternatively, you can configure it to use a channel that already exists:
-        </p>
+<p>
+    Alternatively, you can configure it to use a channel that already exists:
+</p>
 
-        <pre>notify-run configure https://notify.run/<strong>[channel name]</strong></pre>
+<pre>notify-run configure https://notify.run/<strong>[channel name]</strong></pre>
 
-        <p>
-            The configuration is stored in the
-            <samp>~/.config/notify-run</samp> file in your home directory. It will be picked up by subsequent runs of
-            <samp>notify-run</samp> as well as the
-            <samp>notify_run</samp>
-            Python module.
-        </p>
+<p>
+    The configuration is stored in the
+    <samp>~/.config/notify-run</samp> file in your home directory. It will be picked up by subsequent runs of
+    <samp>notify-run</samp> as well as the
+    <samp>notify_run</samp>
+    Python module.
+</p>
 
-        <h3>Jupyter</h3>
+<h3>Jupyter</h3>
 
-        <img src="images/notebook.png" style="width: 500px; height: 466px;" />
+<img src="images/notebook.png" style="width: 500px; height: 466px;" />
 
-        <p>When used inside a Jupyter notebook, the subscribe link is clickable and a QR code is displayed.
-        </p>
+<p>When used inside a Jupyter notebook, the subscribe link is clickable and a QR code is displayed.
+</p>
 
-        <h3>Keras</h3>
+<h3>Keras</h3>
 
-        <p>Notify includes a callback for
-            <a href="https://keras.io">Keras</a> which sends a progress notification at the end of each epoch. After configuring an endpoint above,
-            import
-            <samp>NotifyCallback</samp> from
-            <samp>notify_run.keras</samp> and pass it in the callback parameter to a Keras
-            <samp>fit</samp> method.</p>
+<p>Notify includes a callback for
+    <a href="https://keras.io">Keras</a> which sends a progress notification at the end of each epoch. After configuring an endpoint above, import
+    <samp>NotifyCallback</samp> from
+    <samp>notify_run.keras</samp> and pass it in the callback parameter to a Keras
+    <samp>fit</samp> method.</p>
 
-        <pre>from notify_run.keras import NotifyCallback
+<pre>from notify_run.keras import NotifyCallback
 # model is a Keras model that you have created elsewhere.
 model.fit(x, y, callbacks=[NotifyCallback()])</pre>
 
-        <h2>Self-hosting</h2>
+<h2>Self-hosting</h2>
 
-        <p>
-            This public instance is freely provided for your convenience, but does not have an
-            <a href="https://en.wikipedia.org/wiki/Service-level_agreement">SLA</a>
-            and should not be used for notification messages containing private data. For more demanding use cases, you may prefer to
-            run your own instance of the server on your own network.
-        </p>
-        <p>
-            Self-hosting is currently not documented, but have a look at
-            <a href="https://github.com/paulgb/notify.run/tree/master/server">the files here</a>
-            and feel free to reach out to me for guidance.
-        </p>
+<p>
+    This public instance is freely provided for your convenience, but does not have an
+    <a href="https://en.wikipedia.org/wiki/Service-level_agreement">SLA</a>
+    and should not be used for notification messages containing private data. For more demanding use cases, you may prefer to
+    run your own instance of the server on your own network.
+</p>
+<p>
+    Self-hosting is currently not documented, but have a look at
+    <a href="https://github.com/paulgb/notify.run/tree/master/server">the files here</a>
+    and feel free to reach out to me for guidance.
+</p>
 
-        <h2>Issues and Questions</h2>
+<h2>Issues and Questions</h2>
 
-        <p>
-            If you find bugs or have other questions, please
-            <a href="https://github.com/paulgb/notify.run/issues">file a bug report</a>,
-            <a href="mailto:notify@paulbutler.org">send me an email</a>, or
-            <a href="https://twitter.com/paulgb">tweet at me</a>.
-        </p>
+<p>
+    If you find bugs or have other questions, please
+    <a href="https://github.com/paulgb/notify.run/issues">file a bug report</a>,
+    <a href="mailto:notify@paulbutler.org">send me an email</a>, or
+    <a href="https://twitter.com/paulgb">tweet at me</a>.
+</p>
