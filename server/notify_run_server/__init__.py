@@ -5,6 +5,7 @@ from flask import Flask, jsonify, request, Response
 from flask_cors import CORS
 from pyqrcode import QRCode
 from io import BytesIO
+import json
 
 from notify_run_server.model import NotifyModel, NoSuchChannel
 from notify_run_server.params import VAPID_PUBKEY, API_SERVER, WEB_SERVER
@@ -92,8 +93,14 @@ def post_channel(channel_id):
     message = request.get_data().decode('utf-8')
     channel = model.get_channel(channel_id)
     for sub in channel['subscriptions'].values():
-        print(sub)
-        notify(sub, message)
+        message_json = json.dumps({
+            'message': message,
+            'channel': channel_id,
+        })
+        try:
+            notify(sub, message_json)
+        except:
+            pass
 
     try:
         model.put_message(channel_id, message)
