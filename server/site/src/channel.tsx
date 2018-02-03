@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as moment from 'moment';
 
 import { NotifyAPI, Message, ChannelResponse } from './api';
 import { SubscriptionManager } from './subscription';
