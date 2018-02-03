@@ -21,7 +21,8 @@ class NotifyCallback(Callback):
         self.epochs = self.params['epochs']
 
     def on_epoch_end(self, epoch, logs=None):
-        if epoch == self.epochs - 1:
+        epoch += 1
+        if epoch == self.epochs:
             message = 'Done training {}'.format(self.epochs)
         else:
             message = 'Done epoch {} of {}.'.format(epoch, self.epochs)
