@@ -69,6 +69,7 @@ class NotifyModel:
         result = self._message_table.query(
             KeyConditionExpression=Key('channelId').eq(channel_id),
             ScanIndexForward=False,
+            Limit=10,
         )
         items = result['Items']
         return [
