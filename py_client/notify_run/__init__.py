@@ -1,10 +1,16 @@
 from os import environ, makedirs
 from os.path import expanduser, basename
 import json
-from urllib.parse import urlparse
 import requests
 from pyqrcode import QRCode
 from io import BytesIO
+
+try:
+    # Python 3.x
+    from urllib.parse import urlparse
+except ImportError:
+    # Python 2.x
+    from urlparse import urlparse
 
 DEFAULT_API_SERVER = environ.get(
     'NOTIFY_API_SERVER', 'https://notify.run/api/')
@@ -82,7 +88,12 @@ class Notify:
             return
 
     def write_config(self):
-        makedirs(basename(self._config_file), exist_ok=True)
+        try:
+            makedirs(basename(self._config_file))
+        except OSError:
+            # file exists
+            pass
+
         config = {
             'endpoint': self.endpoint,
         }

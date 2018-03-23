@@ -9,6 +9,13 @@ def check_existing(notify, force):
     if notify.config_file_exists and not force:
         print(
             'Overwrite existing configuration ({})? [y/N]'.format(notify.endpoint))
+
+        try:
+            # Python 2.x
+            input = raw_input
+        except:
+            raise
+
         return input().lower() == 'y'
     return True
 
