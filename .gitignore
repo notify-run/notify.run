@@ -10,3 +10,4 @@ server/site/dist
 .env.prod
 .DS_store
 *.egg-info
+package-lock.json

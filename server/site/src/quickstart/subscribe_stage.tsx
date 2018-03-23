@@ -81,7 +81,7 @@ export class SubscribeStage extends React.Component<SubscribeStageProps, Subscri
                     </p>
                 </div>
                 <div className="seven wide column">
-                    <embed type="image/svg+xml" src={`${Config.API_SERVER}/${this.props.channelId}/qr.svg`} />
+                    <embed style={{ height: '280px' }} type="image/svg+xml" src={`${Config.API_SERVER}/${this.props.channelId}/qr.svg`} />
                 </div>
             </div>
             {
