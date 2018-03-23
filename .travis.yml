@@ -5,4 +5,4 @@ python:
   - "3.5"
   - "3.6"
 script:
-  - python py_client/notify_run/setup.py install; python -m notify_run
+  - python py_client/setup.py install; python -m notify_run
