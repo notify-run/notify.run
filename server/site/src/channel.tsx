@@ -121,9 +121,7 @@ export class ChannelPage extends React.Component<ChannelPageProps, ChannelPageSt
             </p>
             <p>Subscribe on another device by opening <a href={webLink}>{webLink}</a> or scanning the QR code below.</p>
 
-            <embed type="image/svg+xml" src={NotifyAPI.getURLOfQR(this.props.channelId)} />
-
-
+            <embed style={{ height: '270px' }} type="image/svg+xml" src={NotifyAPI.getURLOfQR(this.props.channelId)} />
         </div>
     }
 }
