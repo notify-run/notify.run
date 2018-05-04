@@ -1,3 +1,5 @@
+![NetflixOSS Lifecycle](https://img.shields.io/osslifecycle/paulgb/notify.run.svg)
+
 notify.run
 ==========
 
