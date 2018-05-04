@@ -1,4 +1,5 @@
 ![NetflixOSS Lifecycle](https://img.shields.io/osslifecycle/paulgb/notify.run.svg)
+[![Build Status](https://travis-ci.org/paulgb/notify.run.svg?branch=master)](https://travis-ci.org/paulgb/notify.run)
 
 notify.run
 ==========
@@ -11,4 +12,3 @@ For an introduction to the Python package, see [py_client/README.rst](py_client/
 
 ![Screencast](https://s3.amazonaws.com/aws-website-staticfiles-25g9k/notify_run.gif)
 
-[![Build Status](https://travis-ci.org/paulgb/notify.run.svg?branch=master)](https://travis-ci.org/paulgb/notify.run)
