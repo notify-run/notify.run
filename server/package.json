@@ -6,7 +6,11 @@
   "author": "Paul Butler <notify.run@paulbutler.org>",
   "license": "MIT",
   "devDependencies": {
-    "serverless-python-requirements": "^3.3.0",
-    "serverless-wsgi": "^1.4.4"
+    "serverless-python-requirements": "^3.3.1",
+    "serverless-wsgi": "^1.5.0"
+  },
+  "dependencies": {
+    "node-pre-gyp": "^0.10.3",
+    "serverless": "^1.29.2"
   }
 }
