@@ -1,5 +1,9 @@
 service: serverless-flask
 
+package:
+  exclude:
+    - "site/**"
+
 plugins:
   - serverless-python-requirements
   - serverless-wsgi
