@@ -1,5 +1,5 @@
 from os import environ, makedirs
-from os.path import expanduser, basename
+from os.path import expanduser, dirname 
 import json
 import requests
 from pyqrcode import QRCode
@@ -89,7 +89,7 @@ class Notify:
 
     def write_config(self):
         try:
-            makedirs(basename(self._config_file))
+            makedirs(dirname(self._config_file))
         except OSError:
             # file exists
             pass
