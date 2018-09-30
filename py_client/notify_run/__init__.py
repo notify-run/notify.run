@@ -1,5 +1,5 @@
 from os import environ, makedirs
-from os.path import expanduser, dirname 
+from os.path import expanduser, dirname
 import json
 import requests
 from pyqrcode import QRCode
