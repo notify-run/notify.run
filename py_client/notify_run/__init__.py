@@ -81,7 +81,7 @@ class Notify:
                 self.config_file_exists = True
                 config = json.load(conffile)
                 self.endpoint = config['endpoint']
-        except FileNotFoundError:
+        except OSError:
             return
         except json.decoder.JSONDecodeError:
             print('Invalid JSON in {}'.format(self._config_file))
