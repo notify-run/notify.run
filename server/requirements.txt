@@ -9,7 +9,7 @@ cryptography>=2.3
 docutils==0.14
 ecdsa==0.13
 flake8==3.5.0
-Flask==0.12.2
+Flask==1.0.2
 Flask-Cors==3.0.3
 http-ece==1.0.5
 idna==2.6
