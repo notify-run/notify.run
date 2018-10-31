@@ -46,8 +46,10 @@ def main():
 
     # "send" command: send a message
     notify_parser = subparsers.add_parser('send')
-    notify_parser.add_argument('message')
-    notify_parser.add_argument('--action', '-a', default=None)
+    notify_parser.add_argument('message',
+                               help='The message text to be sent.')
+    notify_parser.add_argument('--action', '-a', default=None,
+                               help='An optional URL to open if the notification is clicked.')
     notify_parser.add_argument('--endpoint', '-e')
     notify_parser.set_defaults(func=send)
 

@@ -49,6 +49,11 @@ Once you have registered a channel, you can send a message to it with the
 
     notify-run send "Hi from notify-run."
 
+To open a webpage when the notification is clicked, you can pass it to
+notify-run as the `-a` parameter:
+
+    notify-run send "Click to open notify.run!" -a https://notify.run
+
 Using an Existing Endpoint
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -67,6 +72,7 @@ The commands above can also be used through a Python interface::
     notify = Notify()
     notify.register()
     notify.send('Hi there!')
+    notify.send('Click to open notify.run!', 'https://notify.run')
 
 The ``notify.register()`` and ``notify.info()`` commands return an ``EndpointInfo`` object.
 When rendered in a terminal, this prints the QR code in a terminal-friendly way. When used
