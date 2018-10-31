@@ -12,11 +12,11 @@ def check_existing(notify, force):
 
         try:
             # Python 2.x
-            input = raw_input
-        except:
-            raise
+            input_fn = raw_input
+        except NameError:
+            input_fn = input
 
-        return input().lower() == 'y'
+        return input_fn().lower() == 'y'
     return True
 
 
