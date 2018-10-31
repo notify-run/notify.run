@@ -78,10 +78,11 @@ class NotifyModel:
                 'time': dateutil.parser.parse(item['messageTime'])
             } for item in items]
 
-    def put_message(self, channel_id: str, message: str):
+    def put_message(self, channel_id: str, message: str, data: dict):
         self._message_table.put_item(
             Item={
                 'channelId': channel_id,
                 'messageTime': str(datetime.now()),
                 'message': message,
+                'data': data,
             })

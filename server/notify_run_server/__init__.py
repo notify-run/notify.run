@@ -7,6 +7,11 @@ from pyqrcode import QRCode
 from io import BytesIO
 import json
 
+try:
+    from urllib.parse import parse_qs
+except ImportError:
+    from urlparse import parse_qs
+
 from notify_run_server.model import NotifyModel, NoSuchChannel
 from notify_run_server.params import VAPID_PUBKEY, API_SERVER, WEB_SERVER
 from notify_run_server.notify import notify
@@ -90,12 +95,24 @@ def get_channel(channel_id):
 
 @app.route("/<channel_id>", methods=['POST'])
 def post_channel(channel_id):
-    message = request.get_data().decode('utf-8')
+    # print(request.form)
+
+    message = request.get_data(as_text=True)
+
+    parsed = parse_qs(message)
+    if 'message' in parsed:
+        message = parsed['message'][0]
+
+    data = dict()
+    if 'action' in parsed:
+        data = {'action': parsed['action'][0]}
+
     channel = model.get_channel(channel_id)
     for sub in channel['subscriptions'].values():
         message_json = json.dumps({
             'message': message,
             'channel': channel_id,
+            'data': data
         })
         try:
             notify(sub, message_json)
@@ -103,7 +120,7 @@ def post_channel(channel_id):
             pass
 
     try:
-        model.put_message(channel_id, message)
+        model.put_message(channel_id, message, data)
     except NoSuchChannel as e:
         return 'no such channel: {}'.format(e.channel_id), 404
     return '{}'

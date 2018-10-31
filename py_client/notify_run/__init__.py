@@ -105,10 +105,10 @@ class Notify:
 
     # Commands
 
-    def send(self, message):
+    def send(self, message, action=None):
         if self.endpoint is None:
             raise NotConfigured()
-        requests.post(self.endpoint, message)
+        requests.post(self.endpoint, {'message': message, 'action': action})
 
     def info(self):
         if self.endpoint is None:
