@@ -113,7 +113,20 @@ class Notify:
     def info(self):
         if self.endpoint is None:
             raise NotConfigured
-        r = requests.get(self.endpoint + '/info').json()
+
+        endpoint = self.endpoint + '/info'
+
+        try:
+            r = requests.get(endpoint).json()
+        except requests.exceptions.ConnectionError:
+            print('Error connecting to {}\n'.format(endpoint))
+            print('Full exception:')
+            raise
+        except json.decoder.JSONDecodeError:
+            print(
+                'Successfully fetched from {} but could not decode JSON.\n'.format(endpoint))
+            print('Full exception:')
+            raise
         return EndpointInfo(r)
 
     def register(self):
