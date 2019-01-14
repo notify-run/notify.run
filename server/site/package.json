@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "license": "MIT",
   "dependencies": {
+    "@types/node": "^10.12.18",
     "@types/react": "^16.0.35",
     "@types/react-dom": "^16.0.3",
     "react": "^16.7.0",

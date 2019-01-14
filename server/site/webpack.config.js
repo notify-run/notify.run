@@ -2,6 +2,7 @@ var webpack = require('webpack');
 const path = require('path');
 
 module.exports = {
+    mode: 'production',
     context: path.resolve('src'),
     entry: './main.tsx',
     output: {
