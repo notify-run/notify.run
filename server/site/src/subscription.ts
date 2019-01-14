@@ -30,6 +30,10 @@ export class SubscriptionManager {
     }
 
     getSubscription(): Promise<Subscription> {
+        if (typeof navigator.serviceWorker === 'undefined') {
+            return new Promise((resolve, reject) => reject());
+        }
+
         return navigator.serviceWorker.ready
             .then((serviceWorkerRegistration) =>
                 serviceWorkerRegistration.pushManager.getSubscription()

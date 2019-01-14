@@ -40,6 +40,7 @@ interface ChannelPageState {
     messages: Message[],
     loading: boolean,
     subscribed: boolean,
+    subscribeDisabled: boolean,
 }
 
 export class ChannelPage extends React.Component<ChannelPageProps, ChannelPageState> {
@@ -52,6 +53,7 @@ export class ChannelPage extends React.Component<ChannelPageProps, ChannelPageSt
             messages: [],
             loading: true,
             subscribed: false,
+            subscribeDisabled: false
         };
     }
 
@@ -63,6 +65,10 @@ export class ChannelPage extends React.Component<ChannelPageProps, ChannelPageSt
                 this.setState({
                     subscribed: subscribed,
                 });
+            }).catch(() => {
+                this.setState({
+                    subscribeDisabled: true
+                })
             });
 
             this.setState({
@@ -107,16 +113,19 @@ export class ChannelPage extends React.Component<ChannelPageProps, ChannelPageSt
 
             <pre>curl {channelEndpoint} -d "message goes here"</pre>
 
-
             <h3>Add Subscription</h3>
 
             <p>Subscribe on this device using the button below.</p>
             <p>{
-                this.state.subscribed ?
+                this.state.subscribeDisabled ?
                     <button
-                        className="ui disabled button">Already Subscribed</button> :
-                    <button onClick={this.onSubscribe.bind(this)}
-                        className="ui primary button">Subscribe on this device</button>
+                        className="ui disabled button">Can’t access service worker, maybe you disabled notifications?</button> :
+                    (this.state.subscribed ?
+                        <button
+                            className="ui disabled button">Already Subscribed</button> :
+                        <button onClick={this.onSubscribe.bind(this)}
+                            className="ui primary button">Subscribe on this device</button>
+                    )
             }
             </p>
             <p>Subscribe on another device by opening <a href={webLink}>{webLink}</a> or scanning the QR code below.</p>
