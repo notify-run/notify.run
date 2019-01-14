@@ -1,6 +1,6 @@
 #!/bin/sh
 
-source venv/bin/activate
+source activate notify
 
 set -a
 source .env
