@@ -19,8 +19,12 @@ module.exports = {
         extensions: [".ts", ".tsx", ".js", ".json"]
     },
     module: {
-        loaders: [
-            { test: /\.[tj]sx?$/, loader: 'ts-loader', exclude: /node_modules/ },
+        rules: [
+            {
+                test: /\.[tj]sx?$/,
+                loader: 'ts-loader',
+                exclude: /node_modules/
+            },
         ]
     },
     devServer: {
