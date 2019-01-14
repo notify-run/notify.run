@@ -32,5 +32,5 @@ s3transfer==0.1.12
 six==1.11.0
 SQLAlchemy==1.2.2
 typed-ast==1.1.0
-urllib3==1.22
+urllib3==1.23
 Werkzeug==0.14.1
