@@ -66,9 +66,12 @@ export class ChannelPage extends React.Component<ChannelPageProps, ChannelPageSt
                     subscribed: subscribed,
                 });
             }).catch(() => {
+                // This exacerbates #10; disabling for now.
+                /*
                 this.setState({
                     subscribeDisabled: true
                 })
+                */
             });
 
             this.setState({
