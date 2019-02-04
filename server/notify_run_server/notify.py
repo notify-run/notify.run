@@ -29,9 +29,12 @@ def notify(subscription, data):
         'vapid_claims': {'sub': 'mailto:{}'.format(VAPID_EMAIL)}
     }
 
-    r = webpush(
-        subscription_info=subscription,
-        data=data,
-        timeout=10,
-        **VAPID_PARAMS
-    )
+    try:
+        r = webpush(
+            subscription_info=subscription,
+            data=data,
+            timeout=10,
+            **VAPID_PARAMS
+        )
+    except:
+        pass
