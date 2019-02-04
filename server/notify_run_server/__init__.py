@@ -14,7 +14,7 @@ except ImportError:
 
 from notify_run_server.model import NotifyModel, NoSuchChannel
 from notify_run_server.params import VAPID_PUBKEY, API_SERVER, WEB_SERVER
-from notify_run_server.notify import notify
+from notify_run_server.notify import parallel_notify
 
 app = Flask(__name__)
 CORS(app)
@@ -108,16 +108,8 @@ def post_channel(channel_id):
         data = {'action': parsed['action'][0]}
 
     channel = model.get_channel(channel_id)
-    for sub in channel['subscriptions'].values():
-        message_json = json.dumps({
-            'message': message,
-            'channel': channel_id,
-            'data': data
-        })
-        try:
-            notify(sub, message_json)
-        except:
-            pass
+    parallel_notify(channel['subscriptions'].values(),
+                    message, channel_id, data)
 
     try:
         model.put_message(channel_id, message, data)
