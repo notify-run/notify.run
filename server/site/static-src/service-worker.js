@@ -17,6 +17,8 @@ self.addEventListener('push', function (event) {
         tag: data.channel,
         data: data.data,
         renotify: true,
+        vibrate: data.vibrate,
+        silent: data.silent
     });
 
     event.waitUntil(promiseChain);
