@@ -104,16 +104,17 @@ def post_channel(channel_id):
         message = parsed['message'][0]
 
     data = dict()
+    params = dict()
     if 'action' in parsed:
-        data['action'] = parsed['action'][0]
+        data = {'action': parsed['action'][0]}
     if 'vibrate' in parsed and parsed['vibrate'] != '0':
-        data['vibrate'] = [200, 100, 200]
+        params['vibrate'] = [200, 100, 200]
     if 'silent' in parsed and parsed['silent'] != '0':
-        data['silent'] = True
+        params['silent'] = True
 
     channel = model.get_channel(channel_id)
     parallel_notify(channel['subscriptions'].values(),
-                    message, channel_id, data)
+                    message, channel_id, data, **params)
 
     try:
         model.put_message(channel_id, message, data)

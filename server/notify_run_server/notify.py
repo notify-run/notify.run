@@ -5,15 +5,16 @@ from multiprocessing import Process
 import json
 
 
-def parallel_notify(subscriptions, message, channel_id, data):
+def parallel_notify(subscriptions, message, channel_id, data, **params):
     procs = list()
     for subscription in subscriptions:
-        print(subscription)
         message_json = json.dumps({
             'message': message,
             'channel': channel_id,
-            'data': data
+            'data': data,
+            **params
         })
+        print(message_json)
 
         p = Process(target=notify, args=(subscription, message_json))
         p.start()

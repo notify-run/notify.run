@@ -11,7 +11,7 @@ self.addEventListener('push', function (event) {
     let title = title_body.shift();
     let body = title_body.join('\n');
 
-    const promiseChain = self.registration.showNotification(title, {
+    let options = {
         body: body,
         icon: '/icon.png',
         tag: data.channel,
@@ -19,7 +19,12 @@ self.addEventListener('push', function (event) {
         renotify: true,
         vibrate: data.vibrate,
         silent: data.silent
-    });
+    };
+
+    console.log('here1')
+    console.lot(options)
+
+    const promiseChain = self.registration.showNotification(title, options);
 
     event.waitUntil(promiseChain);
 });
