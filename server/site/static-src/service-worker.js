@@ -22,7 +22,7 @@ self.addEventListener('push', function (event) {
     };
 
     console.log('here1')
-    console.lot(options)
+    console.log(options)
 
     const promiseChain = self.registration.showNotification(title, options);
 
