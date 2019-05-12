@@ -9,7 +9,7 @@ from sqlalchemy.orm.attributes import flag_modified
 
 from notify_run_server.model import (NoSuchChannel, NotifyModel,
                                      generate_channel_id)
-from notify_run_server.params import DB_URI
+from notify_run_server.params import DB_URL
 
 Base = declarative_base()  # type: Any
 

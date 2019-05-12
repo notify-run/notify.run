@@ -7,7 +7,7 @@ def readme():
 
 
 setup(name='notify-run-server',
-      version='0.0.1',
+      version='0.0.2',
       python_requires='>=3.6',
       description='Server for self-hosted notify.run server.',
       long_description=readme(),
