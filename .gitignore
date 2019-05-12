@@ -16,3 +16,4 @@ notify.sqlite
 server/notify_run_server/static
 site/tracker.html
 server/dist
+server/build

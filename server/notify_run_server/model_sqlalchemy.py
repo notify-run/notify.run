@@ -39,7 +39,7 @@ class Message(Base):
 
 class SqlNotifyModel(NotifyModel):
     def __init__(self):
-        engine = create_engine(DB_URI, echo=False)
+        engine = create_engine(DB_URL, echo=False)
         Base.metadata.create_all(engine)
         self._sessionmaker = sessionmaker(bind=engine)
 

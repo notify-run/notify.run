@@ -21,6 +21,7 @@ provider:
   name: aws
   runtime: python3.6
   region: us-east-1
+  stage: ${opt:stage, 'dev'}
   iamRoleStatements:
     - Effect: Allow
       Action:
@@ -34,7 +35,7 @@ provider:
         - { "Fn::GetAtt": ["MessageTable", "Arn" ] }
         - { "Fn::GetAtt": ["ChannelTable", "Arn" ] }
   environment:
-    DB_URI: dynamodb;${self:custom.messageTableName};${self:custom.channelTableName}
+    NOTIFY_DB_URL: "dynamodb:${self:custom.messageTableName}:${self:custom.channelTableName}"
     NOTIFY_VAPID_PRIVKEY: ${env:NOTIFY_VAPID_PRIVKEY}
     NOTIFY_VAPID_PUBKEY: ${env:NOTIFY_VAPID_PUBKEY}
     NOTIFY_VAPID_EMAIL: ${env:NOTIFY_VAPID_EMAIL}
@@ -44,7 +45,7 @@ provider:
 
 functions:
   app:
-    handler: wsgi.handler
+    handler: wsgi_handler.handler
     events:
       - http: ANY /
       - http: 'ANY {proxy+}'
