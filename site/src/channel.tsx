@@ -72,10 +72,12 @@ export class ChannelPage extends React.Component<ChannelPageProps, ChannelPageSt
     loadChannel() {
         NotifyAPI.fetchChannel(this.props.channelId).then((response) => {
             if (response.error) {
-                this.setState({
-                    loading: false,
-                    error: response.error
-                })
+                if (this.state.loading) {
+                    this.setState({
+                        loading: false,
+                        error: response.error
+                    })
+                }
                 return
             }
 
@@ -99,10 +101,12 @@ export class ChannelPage extends React.Component<ChannelPageProps, ChannelPageSt
                 loading: false,
             });
         }).catch((reason) => {
-            this.setState({
-                loading: false,
-                error: 'Error reaching API server.'
-            })
+            if (this.state.loading) {
+                this.setState({
+                    loading: false,
+                    error: 'Error reaching API server.'
+                })    
+            }
         })
     }
 

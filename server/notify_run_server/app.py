@@ -38,11 +38,11 @@ else:
 
 
 def channel_page_url(channel_id):
-    return WEB_SERVER + '/c/' + channel_id
+    return (WEB_SERVER or request.host) + '/c/' + channel_id
 
 
 def channel_endpoint(channel_id):
-    return API_SERVER + '/' + channel_id
+    return (API_SERVER or request.host) + '/' + channel_id
 
 
 def qr_for_channel(channel_id):
