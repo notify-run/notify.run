@@ -1,12 +1,14 @@
 import { Config } from './config';
 import { Subscription } from './subscription';
 
-export type Message = { channelId: string, message: string, time: string };
+export type MessageResult = {endpoint_domain: string, result_message: string, result_status: string, subscription: string}
+export type Message = { channelId: string, message: string, time: string, result?: MessageResult[]};
 export type ChannelResponse = {
     channelId: string,
     pubKey: string,
     messages?: Message[],
     subscriptions: string[],
+    error?: string,
 };
 
 export namespace NotifyAPI {

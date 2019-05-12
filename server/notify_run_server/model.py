@@ -72,17 +72,20 @@ class NotifyModel:
             Limit=10,
         )
         items = result['Items']
+        print(items)
         return [
             {
                 'message': item['message'],
-                'time': dateutil.parser.parse(item['messageTime'])
+                'time': dateutil.parser.parse(item['messageTime']),
+                'result': item.get('result', None),
             } for item in items]
 
-    def put_message(self, channel_id: str, message: str, data: dict):
+    def put_message(self, channel_id: str, message: str, data: dict, result: list):
         self._message_table.put_item(
             Item={
                 'channelId': channel_id,
                 'messageTime': str(datetime.now()),
                 'message': message,
                 'data': data,
+                'result': result,
             })

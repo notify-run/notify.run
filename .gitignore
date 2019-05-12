@@ -6,7 +6,7 @@ server/venv
 __pycache__
 .serverless
 node_modules
-server/site/dist
+site/dist
 .env.prod
 .DS_store
 *.egg-info

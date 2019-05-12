@@ -57,7 +57,7 @@ def register_channel():
 @app.route('/<channel_id>/subscribe', methods=['POST'])
 def subscribe(channel_id):
     model.add_subscription(channel_id, request.get_json())
-    return '{}'
+    return jsonify(dict())
 
 
 @app.route('/<channel_id>/qr.svg', methods=['GET'])
@@ -87,10 +87,9 @@ def get_channel(channel_id):
             'channelId': channel_id,
             'pubKey': VAPID_PUBKEY,
             'subscriptions': list(channel['subscriptions'].keys()),
-
         })
     except NoSuchChannel as e:
-        return 'no such channel: {}'.format(e.channel_id), 404
+        return jsonify({'error': 'No such channel: {}'.format(e.channel_id)}), 404
 
 
 @app.route("/<channel_id>", methods=['POST'])
@@ -113,13 +112,14 @@ def post_channel(channel_id):
         params['silent'] = True
 
     channel = model.get_channel(channel_id)
-    parallel_notify(channel['subscriptions'].values(),
+    result = parallel_notify(channel['subscriptions'],
                     message, channel_id, data, **params)
+    print('result', result)
 
     try:
-        model.put_message(channel_id, message, data)
+        model.put_message(channel_id, message, data, result)
     except NoSuchChannel as e:
-        return 'no such channel: {}'.format(e.channel_id), 404
+        return jsonify({'error': 'No such channel: {}'.format(e.channel_id)}), 404
     return '{}'
 
 

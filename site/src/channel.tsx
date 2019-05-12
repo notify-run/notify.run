@@ -25,6 +25,17 @@ class MessageList extends React.Component<MessageListProps, {}> {
                                     <samp>{message.message}</samp>
                                     <div className="date">{message.time}</div>
                                 </div>
+                                {
+                                    message.result ? message.result.map((result) =>
+                                        <div className="meta">
+                                        {
+                                            result.result_status == '201' ?
+                                            <i className="check icon green"></i>
+                                            : <i className="exclamation circle icon red"></i>
+                                        }
+                                        {result.endpoint_domain}: {result.result_status}</div>
+                                    ) : null
+                                }
                             </div>
                         </div>)
                 }
@@ -41,6 +52,7 @@ interface ChannelPageState {
     loading: boolean,
     subscribed: boolean,
     subscribeDisabled: boolean,
+    error?: string,
 }
 
 export class ChannelPage extends React.Component<ChannelPageProps, ChannelPageState> {
@@ -59,6 +71,14 @@ export class ChannelPage extends React.Component<ChannelPageProps, ChannelPageSt
 
     loadChannel() {
         NotifyAPI.fetchChannel(this.props.channelId).then((response) => {
+            if (response.error) {
+                this.setState({
+                    loading: false,
+                    error: response.error
+                })
+                return
+            }
+
             this.subscriptionManager = new SubscriptionManager(response.pubKey);
             this.subscriptionManager.getSubscription().then((k) => {
                 let subscribed = (response.subscriptions.indexOf(k.id) >= 0);
@@ -78,6 +98,11 @@ export class ChannelPage extends React.Component<ChannelPageProps, ChannelPageSt
                 messages: response.messages || [],
                 loading: false,
             });
+        }).catch((reason) => {
+            this.setState({
+                loading: false,
+                error: 'Error reaching API server.'
+            })
         })
     }
 
@@ -102,6 +127,8 @@ export class ChannelPage extends React.Component<ChannelPageProps, ChannelPageSt
     render() {
         if (this.state.loading) {
             return <div className="ui active centered inline loader"></div>;
+        } else if (this.state.error) {
+            return <div className="ui negative message">{this.state.error}</div>
         }
 
         let channelEndpoint = `${Config.API_SERVER}/${this.props.channelId}`
