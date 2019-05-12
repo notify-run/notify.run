@@ -1,13 +1,12 @@
 from pywebpush import webpush, WebPushException
 
 from notify_run_server.params import VAPID_PRIVKEY, VAPID_EMAIL
-from multiprocessing import Pool
+from multiprocessing import Process, Pipe
 import json
 from urllib.parse import urlparse
 from collections import namedtuple
 from requests.exceptions import ConnectTimeout
 
-MessageSpec = namedtuple('MessageSpec', ['subscription_id', 'subscription_spec', 'message_json'])
 
 def parallel_notify(subscriptions, message, channel_id, data, **params):
     message_json = json.dumps({
@@ -17,49 +16,57 @@ def parallel_notify(subscriptions, message, channel_id, data, **params):
         **params
     })
     
-    pool = Pool(processes=5)
+    procs = list()
+    pipes = list()
 
-    messages = [
-        MessageSpec(subscription_id, subscription_spec, message_json)
-        for subscription_id, subscription_spec in subscriptions.items()
-    ]
+    for subscription_id, subscription_spec in subscriptions.items():
+        result_pipe, child_pipe = Pipe()
+        proc = Process(target=notify, args=(subscription_id, subscription_spec, message_json, child_pipe))
+        proc.start()
+        procs.append(proc)
+        pipes.append(result_pipe)
 
-    print(messages)
+    result = list()
 
-    return pool.map(notify, messages)
+    for proc, pipe in zip(procs, pipes):
+        result.append(pipe.recv())
+        proc.join()
 
-def notify(message_spec: MessageSpec):
+    return result
+
+
+def notify(subscription_id, subscription_spec, message_json, pipe):
     VAPID_PARAMS = {
         'vapid_private_key': VAPID_PRIVKEY,
         'vapid_claims': {'sub': 'mailto:{}'.format(VAPID_EMAIL)}
     }
 
-    endpoint_domain = urlparse(message_spec.subscription_spec['endpoint']).netloc
+    endpoint_domain = urlparse(subscription_spec['endpoint']).netloc
     try:
         r = webpush(
-            subscription_info=message_spec.subscription_spec,
-            data=message_spec.message_json,
+            subscription_info=subscription_spec,
+            data=message_json,
             timeout=10,
             **VAPID_PARAMS
         )
 
-        return {
-            'subscription': message_spec.subscription_id,
+        pipe.send({
+            'subscription': subscription_id,
             'endpoint_domain': endpoint_domain,
             'result_status': str(r.status_code),
             'result_message': r.text or None
-        }
+        })
     except WebPushException as e:
-        return {
-            'subscription': message_spec.subscription_id,
+        pipe.send({
+            'subscription': subscription_id,
             'endpoint_domain': endpoint_domain,
             'result_status': 'WebPush Exception',
             'result_message': str(e)
-        }
+        })
     except ConnectTimeout as e:
-        return {
-                    'subscription': message_spec.subscription_id,
+        pipe.send({
+                    'subscription': subscription_id,
                     'endpoint_domain': endpoint_domain,
                     'result_status': 'Connection Timeout',
                     'result_message': str(e)
-                }
+                })

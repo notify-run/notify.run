@@ -11,6 +11,6 @@
   },
   "dependencies": {
     "node-pre-gyp": "^0.10.3",
-    "serverless": "^1.36.3"
+    "serverless": "^1.42.2"
   }
 }
