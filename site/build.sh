@@ -9,14 +9,6 @@ rm -rf dist static public
 echo "Installing environment."
 npm install
 
-if [ -f .env ]; then
-    echo "Loading .env file."
-    set -a
-    source .env
-else
-    echo "No .env found, skipping."
-fi
-
 echo "Bundling JavaScript."
 ./node_modules/.bin/webpack --display-error-details
 

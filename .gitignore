@@ -13,3 +13,5 @@ site/dist
 package-lock.json
 *.pyc
 notify.sqlite
+server/notify_run_server/static
+site/tracker.html

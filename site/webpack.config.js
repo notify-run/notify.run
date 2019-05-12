@@ -11,10 +11,10 @@ module.exports = {
     },
     devtool: "source-map",
     plugins: [
-        new webpack.EnvironmentPlugin([
-            'NOTIFY_API_SERVER',
-            'NOTIFY_WEB_SERVER',
-        ]),
+        new webpack.EnvironmentPlugin({
+            'NOTIFY_API_SERVER': null,
+            'NOTIFY_WEB_SERVER': null
+        }),
     ],
     resolve: {
         extensions: [".ts", ".tsx", ".js", ".json"]
