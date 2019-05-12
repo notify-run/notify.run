@@ -14,7 +14,6 @@ def parallel_notify(subscriptions, message, channel_id, data, **params):
             'data': data,
             **params
         })
-        print(message_json)
 
         p = Process(target=notify, args=(subscription, message_json))
         p.start()
