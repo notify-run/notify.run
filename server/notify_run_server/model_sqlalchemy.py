@@ -1,17 +1,18 @@
-from sqlalchemy.ext.declarative import declarative_base
-from typing import Any
-
-from sqlalchemy import Column, Integer, String, DateTime, JSON, ForeignKey, create_engine
-from sqlalchemy.orm import sessionmaker, relationship
-
-from notify_run_server.model import NotifyModel, generate_channel_id, NoSuchChannel
-from notify_run_server.params import DB_URI
-from typing import List
 from datetime import datetime
+from typing import Any, List
+
+from sqlalchemy import (JSON, Column, DateTime, ForeignKey, Integer, String,
+                        create_engine)
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy.orm.attributes import flag_modified
 
+from notify_run_server.model import (NoSuchChannel, NotifyModel,
+                                     generate_channel_id)
+from notify_run_server.params import DB_URI
 
-Base = declarative_base() # type: Any
+Base = declarative_base()  # type: Any
+
 
 class Channel(Base):
     __tablename__ = 'channel'
@@ -21,6 +22,7 @@ class Channel(Base):
     meta = Column(JSON)
     subscriptions = Column(JSON)
     messages = relationship('Message')
+
 
 class Message(Base):
     __tablename__ = 'message'
@@ -34,6 +36,7 @@ class Message(Base):
 
     channel = relationship('Channel', back_populates='messages')
 
+
 class SqlNotifyModel(NotifyModel):
     def __init__(self):
         engine = create_engine(DB_URI, echo=True)
@@ -45,9 +48,9 @@ class SqlNotifyModel(NotifyModel):
 
         channel = Channel(
             id=generate_channel_id(),
-            created = datetime.now(),
-            meta = dict(),
-            subscriptions = dict(),
+            created=datetime.now(),
+            meta=dict(),
+            subscriptions=dict(),
         )
 
         session.add(channel)
@@ -60,8 +63,9 @@ class SqlNotifyModel(NotifyModel):
         channel = session.query(Channel).get(channel_id)
         if channel is None:
             raise NoSuchChannel(channel_id)
-        
-        channel.subscriptions[subscription['id']] = subscription['subscription']
+
+        channel.subscriptions[subscription['id']
+                              ] = subscription['subscription']
         flag_modified(channel, 'subscriptions')
         session.commit()
 
@@ -71,7 +75,7 @@ class SqlNotifyModel(NotifyModel):
         channel = session.query(Channel).get(channel_id)
         if channel is None:
             raise NoSuchChannel(channel_id)
-        
+
         return {
             'channelId': channel.id,
             'created': channel.created,
@@ -81,22 +85,23 @@ class SqlNotifyModel(NotifyModel):
 
     def get_messages(self, channel_id: str) -> List[dict]:
         session = self._sessionmaker()
-        messages = session.query(Message).filter_by(channel_id=channel_id).order_by(Message.messageTime.desc())[:10]
+        messages = session.query(Message).filter_by(
+            channel_id=channel_id).order_by(Message.messageTime.desc())[:10]
         return [{
-            'message': m.message,
-            'time': m.messageTime,
-            'result': m.result,
-        } for m in messages]
+            'message': message.message,
+            'time': message.messageTime,
+            'result': message.result,
+        } for message in messages]
 
     def put_message(self, channel_id: str, message: str, data: dict, result: list):
         session = self._sessionmaker()
 
-        m = Message(
+        message = Message(
             channel_id=channel_id,
-            messageTime=datetime.now(), 
-            message=message, 
-            data=data, 
+            messageTime=datetime.now(),
+            message=message,
+            data=data,
             result=result,
         )
-        session.add(m)
+        session.add(message)
         session.commit()

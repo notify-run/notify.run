@@ -2,18 +2,18 @@ from abc import ABC, abstractmethod
 from random import choice
 from typing import List
 
-
 from notify_run_server.params import CHANNEL_ID_CHARS, CHANNEL_ID_LENGTH
 
 
 class NoSuchChannel(Exception):
     def __init__(self, channel_id):
+        super(NoSuchChannel, self).__init__()
         self.channel_id = channel_id
 
 
 def generate_channel_id():
     return ''.join(choice(CHANNEL_ID_CHARS)
-                             for _ in range(CHANNEL_ID_LENGTH))
+                   for _ in range(CHANNEL_ID_LENGTH))
 
 
 class NotifyModel(ABC):
@@ -36,4 +36,3 @@ class NotifyModel(ABC):
     @abstractmethod
     def put_message(self, channel_id: str, message: str, data: dict, result: list):
         pass
-

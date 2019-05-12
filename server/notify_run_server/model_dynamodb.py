@@ -1,12 +1,14 @@
-from notify_run_server.model import NotifyModel, NoSuchChannel, generate_channel_id
-
 from datetime import datetime
-from boto3.dynamodb.conditions import Key
+from typing import List
+
 import boto3
 import dateutil.parser
-from notify_run_server.params import MESSAGE_TABLE, CHANNEL_TABLE
+from boto3.dynamodb.conditions import Key
 
-from typing import List
+from notify_run_server.model import (NoSuchChannel, NotifyModel,
+                                     generate_channel_id)
+from notify_run_server.params import CHANNEL_TABLE, MESSAGE_TABLE
+
 
 class DynamodbNotifyModel(NotifyModel):
     def __init__(self):
@@ -25,13 +27,13 @@ class DynamodbNotifyModel(NotifyModel):
         return channel_id
 
     def add_subscription(self, channel_id: str, subscription: dict):
-        id = subscription['id']
+        subscription_id = subscription['id']
         self._channel_table.update_item(
             Key={'channelId': channel_id},
             UpdateExpression='SET #s.#k = :new_sub',
             ExpressionAttributeNames={
                 '#s': 'subscriptions',
-                '#k': id,
+                '#k': subscription_id,
             },
             ExpressionAttributeValues={
                 ':new_sub': subscription['subscription']

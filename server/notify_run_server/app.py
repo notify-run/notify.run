@@ -1,32 +1,32 @@
-import os
+from io import BytesIO
 
-from datetime import datetime
-from flask import Flask, jsonify, request, Response
+from flask import Flask, Response, jsonify, request
 from flask_cors import CORS
 from pyqrcode import QRCode
-from io import BytesIO
-import json
+
+from notify_run_server.model import NoSuchChannel, NotifyModel
+from notify_run_server.notify import parallel_notify
+from notify_run_server.params import (API_SERVER, DB_MODEL,
+                                      VAPID_PUBKEY, WEB_SERVER)
 
 try:
     from urllib.parse import parse_qs
 except ImportError:
-    from urlparse import parse_qs # type: ignore
+    from urlparse import parse_qs  # type: ignore
 
-from notify_run_server.model import NotifyModel, NoSuchChannel
-from notify_run_server.params import VAPID_PUBKEY, API_SERVER, WEB_SERVER, DB_URI, DB_MODEL
-from notify_run_server.notify import parallel_notify
 
 app = Flask(__name__)
 CORS(app)
 
 if DB_MODEL == 'boto':
     from notify_run_server.model_dynamodb import DynamodbNotifyModel
-    model = DynamodbNotifyModel() # type: NotifyModel
+    model = DynamodbNotifyModel()  # type: NotifyModel
 elif DB_MODEL == 'sql':
     from notify_run_server.model_sqlalchemy import SqlNotifyModel
     model = SqlNotifyModel()
 else:
     raise NotImplementedError()
+
 
 def channel_page_url(channel_id):
     return WEB_SERVER + '/c/' + channel_id
@@ -67,7 +67,7 @@ def subscribe(channel_id):
 
 
 @app.route('/<channel_id>/qr.svg', methods=['GET'])
-def qr(channel_id):
+def get_qr(channel_id):
     buffer = BytesIO()
     qr_for_channel(channel_id).svg(buffer, 6)
     return Response(buffer.getvalue().decode('utf-8'), mimetype='text/xml')
@@ -75,7 +75,7 @@ def qr(channel_id):
 
 @app.route('/<channel_id>/info', methods=['GET'])
 def info(channel_id):
-    channel = model.get_channel(channel_id)
+    model.get_channel(channel_id) # Ensure the channel exists.
 
     return jsonify({
         'channel_page': channel_page_url(channel_id),
@@ -94,14 +94,12 @@ def get_channel(channel_id):
             'pubKey': VAPID_PUBKEY,
             'subscriptions': list(channel['subscriptions'].keys()),
         })
-    except NoSuchChannel as e:
-        return jsonify({'error': 'No such channel: {}'.format(e.channel_id)}), 404
+    except NoSuchChannel as err:
+        return jsonify({'error': 'No such channel: {}'.format(err.channel_id)}), 404
 
 
 @app.route("/<channel_id>", methods=['POST'])
 def post_channel(channel_id):
-    # print(request.form)
-
     message = request.get_data(as_text=True)
 
     parsed = parse_qs(message)
@@ -120,13 +118,13 @@ def post_channel(channel_id):
     channel = model.get_channel(channel_id)
     print(channel)
     result = parallel_notify(channel['subscriptions'],
-                    message, channel_id, data, **params)
+                             message, channel_id, data, **params)
     print('result', result)
 
     try:
         model.put_message(channel_id, message, data, result)
-    except NoSuchChannel as e:
-        return jsonify({'error': 'No such channel: {}'.format(e.channel_id)}), 404
+    except NoSuchChannel as err:
+        return jsonify({'error': 'No such channel: {}'.format(err.channel_id)}), 404
     return '{}'
 
 

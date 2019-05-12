@@ -1,11 +1,11 @@
-from pywebpush import webpush, WebPushException
-
-from notify_run_server.params import VAPID_PRIVKEY, VAPID_EMAIL
-from multiprocessing import Process, Pipe
 import json
+from multiprocessing import Pipe, Process
 from urllib.parse import urlparse
-from collections import namedtuple
+
+from pywebpush import WebPushException, webpush
 from requests.exceptions import ConnectTimeout
+
+from notify_run_server.params import VAPID_EMAIL, VAPID_PRIVKEY
 
 
 def parallel_notify(subscriptions, message, channel_id, data, **params):
@@ -15,14 +15,14 @@ def parallel_notify(subscriptions, message, channel_id, data, **params):
         'data': data,
         **params
     })
-    
+
     procs = list()
     pipes = list()
 
     for subscription_id, subscription_spec in subscriptions.items():
-        print('h2', subscription_spec)
         result_pipe, child_pipe = Pipe()
-        proc = Process(target=notify, args=(subscription_id, subscription_spec, message_json, child_pipe))
+        proc = Process(target=notify, args=(subscription_id,
+                                            subscription_spec, message_json, child_pipe))
         proc.start()
         procs.append(proc)
         pipes.append(result_pipe)
@@ -37,37 +37,37 @@ def parallel_notify(subscriptions, message, channel_id, data, **params):
 
 
 def notify(subscription_id, subscription_spec, message_json, pipe):
-    VAPID_PARAMS = {
+    vapid_params = {
         'vapid_private_key': VAPID_PRIVKEY,
         'vapid_claims': {'sub': 'mailto:{}'.format(VAPID_EMAIL)}
     }
 
     endpoint_domain = urlparse(subscription_spec['endpoint']).netloc
     try:
-        r = webpush(
+        result = webpush(
             subscription_info=subscription_spec,
             data=message_json,
             timeout=10,
-            **VAPID_PARAMS
+            **vapid_params
         )
 
         pipe.send({
             'subscription': subscription_id,
             'endpoint_domain': endpoint_domain,
-            'result_status': str(r.status_code),
-            'result_message': r.text or None
+            'result_status': str(result.status_code),
+            'result_message': result.text or None
         })
-    except WebPushException as e:
+    except WebPushException as err:
         pipe.send({
             'subscription': subscription_id,
             'endpoint_domain': endpoint_domain,
             'result_status': 'WebPush Exception',
-            'result_message': str(e)
+            'result_message': str(err)
         })
-    except ConnectTimeout as e:
+    except ConnectTimeout as err:
         pipe.send({
-                    'subscription': subscription_id,
-                    'endpoint_domain': endpoint_domain,
-                    'result_status': 'Connection Timeout',
-                    'result_message': str(e)
-                })
+            'subscription': subscription_id,
+            'endpoint_domain': endpoint_domain,
+            'result_status': 'Connection Timeout',
+            'result_message': str(err)
+        })
