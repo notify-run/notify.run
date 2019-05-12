@@ -1,0 +1,102 @@
+from sqlalchemy.ext.declarative import declarative_base
+from typing import Any
+
+from sqlalchemy import Column, Integer, String, DateTime, JSON, ForeignKey, create_engine
+from sqlalchemy.orm import sessionmaker, relationship
+
+from notify_run_server.model import NotifyModel, generate_channel_id, NoSuchChannel
+from notify_run_server.params import DB_URI
+from typing import List
+from datetime import datetime
+from sqlalchemy.orm.attributes import flag_modified
+
+
+Base = declarative_base() # type: Any
+
+class Channel(Base):
+    __tablename__ = 'channel'
+
+    id = Column(String, primary_key=True)
+    created = Column(DateTime)
+    meta = Column(JSON)
+    subscriptions = Column(JSON)
+    messages = relationship('Message')
+
+class Message(Base):
+    __tablename__ = 'message'
+
+    id = Column(Integer, primary_key=True)
+    channel_id = Column(String, ForeignKey('channel.id'))
+    messageTime = Column(DateTime)
+    message = Column(String)
+    data = Column(JSON)
+    result = Column(JSON)
+
+    channel = relationship('Channel', back_populates='messages')
+
+class SqlNotifyModel(NotifyModel):
+    def __init__(self):
+        engine = create_engine(DB_URI, echo=True)
+        Base.metadata.create_all(engine)
+        self._sessionmaker = sessionmaker(bind=engine)
+
+    def register_channel(self, meta: dict) -> str:
+        session = self._sessionmaker()
+
+        channel = Channel(
+            id=generate_channel_id(),
+            created = datetime.now(),
+            meta = dict(),
+            subscriptions = dict(),
+        )
+
+        session.add(channel)
+        session.commit()
+        return channel.id
+
+    def add_subscription(self, channel_id: str, subscription: dict):
+        session = self._sessionmaker()
+
+        channel = session.query(Channel).get(channel_id)
+        if channel is None:
+            raise NoSuchChannel(channel_id)
+        
+        channel.subscriptions[subscription['id']] = subscription['subscription']
+        flag_modified(channel, 'subscriptions')
+        session.commit()
+
+    def get_channel(self, channel_id: str):
+        session = self._sessionmaker()
+
+        channel = session.query(Channel).get(channel_id)
+        if channel is None:
+            raise NoSuchChannel(channel_id)
+        
+        return {
+            'channelId': channel.id,
+            'created': channel.created,
+            'meta': channel.meta,
+            'subscriptions': channel.subscriptions,
+        }
+
+    def get_messages(self, channel_id: str) -> List[dict]:
+        session = self._sessionmaker()
+        messages = session.query(Message).filter_by(channel_id=channel_id).order_by(Message.messageTime.desc())[:10]
+        return [{
+            'message': m.message,
+            'time': m.messageTime,
+            'result': m.result,
+        } for m in messages]
+
+    def put_message(self, channel_id: str, message: str, data: dict, result: list):
+        session = self._sessionmaker()
+
+        m = Message(
+            channel_id=channel_id,
+            messageTime=datetime.now(), 
+            message=message, 
+            data=data, 
+            result=result,
+        )
+        session.add(m)
+        session.commit()

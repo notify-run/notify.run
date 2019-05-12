@@ -5,5 +5,5 @@ source activate notify
 set -a
 source .env
 
-python -m notify_run_server.__init__
+python -m notify_run_server.app
 

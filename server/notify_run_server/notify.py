@@ -20,6 +20,7 @@ def parallel_notify(subscriptions, message, channel_id, data, **params):
     pipes = list()
 
     for subscription_id, subscription_spec in subscriptions.items():
+        print('h2', subscription_spec)
         result_pipe, child_pipe = Pipe()
         proc = Process(target=notify, args=(subscription_id, subscription_spec, message_json, child_pipe))
         proc.start()

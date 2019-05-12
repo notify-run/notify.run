@@ -12,3 +12,4 @@ site/dist
 *.egg-info
 package-lock.json
 *.pyc
+notify.sqlite
