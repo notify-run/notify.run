@@ -50,7 +50,7 @@ Once you have registered a channel, you can send a message to it with the
     notify-run send "Hi from notify-run."
 
 To open a webpage when the notification is clicked, you can pass it to
-notify-run as the `-a` parameter:
+notify-run as the `-a` parameter::
 
     notify-run send "Click to open notify.run!" -a https://notify.run
 
