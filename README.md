@@ -10,5 +10,7 @@ For general information, see [notify.run](https://notify.run).
 
 For an introduction to the Python package, see [py_client/README.rst](py_client/README.rst) or the 40-second demo below.
 
+For instructions on self-hosting a server, see [server/README.rst](server/README.rst).
+
 ![Screencast](https://s3.amazonaws.com/aws-website-staticfiles-25g9k/notify_run.gif)
 
