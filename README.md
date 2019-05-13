@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/paulgb/notify.run.svg?branch=master)](https://travis-ci.org/paulgb/notify.run)
 
-<img src="site/static-src/icon.png" height="30" />notify.run
+<img src="site/static-src/icon.png" height="30" /> notify.run
 ============================================================
 
 **[notify.run](https://notify.run) makes it easy to programmatically send notifications to your own phone or desktop.** It is provided as a free web service that can be used without installation (on both the sending and receiving end). This repository contains the source of the web service, as well as a Python client that provides integration with Jupyter and Keras.
