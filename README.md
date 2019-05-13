@@ -1,4 +1,3 @@
-![NetflixOSS Lifecycle](https://img.shields.io/osslifecycle/paulgb/notify.run.svg)
 [![Build Status](https://travis-ci.org/paulgb/notify.run.svg?branch=master)](https://travis-ci.org/paulgb/notify.run)
 
 <img src="site/static-src/icon.png" height="40" />notify.run
