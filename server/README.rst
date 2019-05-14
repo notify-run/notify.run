@@ -26,7 +26,7 @@ Database
 
 ``notify-run-server`` needs a database backend to store subscription information and notification history. By default, it uses a sqlite database called ``notify.sqlite`` in the current working directory. All database access happens through `SQLAlchemy <https://www.sqlalchemy.org/>`_, so it is possible to replace sqlite with another supported backend like MySQL or Postgres. Note, however, that not all backends support the JSON field type, which is required by ``notify-run-server``.
 
-To configure the database, set the environment variable ``NOTIFY_DB_URL`` to a URI that conforms to `SQLAlchemy’s URL schema <https://docs.sqlalchemy.org/en/13/core/engines.html#database-urls>`_.
+To configure the database, set the environment variable ``NOTIFY_DB_URL`` to a URI that conforms to `SQLAlchemy’s URL schema <https://docs.sqlalchemy.org/en/13/core/engines.html#database-urls>`_. The server will create the required tables the first time it connects to the database.
 
 Alternatively, ``notify-run-server`` can use Amazon DynamoDB as a backend. This is used for the main production deployment, `notify.run <https://notify.run>`_. To use this option, create two DynamoDB tables for channels and messages (see `serverless.yml <https://github.com/paulgb/notify.run/blob/master/deployment/serverless.yml>`_ for the schema). Then set up the Python ``boto`` package with your AWS credentials and set the ``NOTIFY_DB_URL`` with the format ``dynamodb:<message_table_name>:<channel_table_name>``.
 
