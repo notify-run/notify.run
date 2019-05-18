@@ -116,14 +116,18 @@ def get_channel(channel_id):
 def post_channel(channel_id):
     message = request.get_data(as_text=True)
 
-    parsed = parse_qs(message)
+    parsed = parse_qs(message, keep_blank_values=True)
     if 'message' in parsed:
         message = parsed['message'][0]
 
     data = dict()
     params = dict()
     if 'action' in parsed:
-        data = {'action': parsed['action'][0]}
+        if 'action' != '':
+            data = {'action': parsed['action'][0]}
+    else:
+        data = {'action': channel_page_url(channel_id)}
+    
     if 'vibrate' in parsed and parsed['vibrate'] != '0':
         params['vibrate'] = [200, 100, 200]
     if 'silent' in parsed and parsed['silent'] != '0':
