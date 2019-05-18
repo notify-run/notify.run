@@ -5,17 +5,22 @@ from notify_run import Notify
 
 
 class NotifyCallback(Callback):
-    def __init__(self, notify=None):
+    def __init__(self, notify=None, action=None):
         if notify is None:
             notify = Notify()
         self.notify = notify
-        self._format_pair = '{}: {:.2f}'
+        self._format_pair = '{}: {:.5f}'
+        if action is None:
+            action = nf.endpoint.split('/')
+            action.insert(-1, 'c')
+            action = '/'.join(action)
+        self.action = action
     
     def _format_stats(self, logs):
         return ''.join(self._format_pair.format(k, v) for k, v in logs.items())
 
     def send_message(self, message):
-        start_new_thread(self.notify.send, (message,))
+        start_new_thread(self.notify.send, (message, self.action))
     
     def on_train_begin(self, logs=None):
         self.epochs = self.params['epochs']
