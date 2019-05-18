@@ -10,10 +10,6 @@ class NotifyCallback(Callback):
             notify = Notify()
         self.notify = notify
         self._format_pair = '{}: {:.5f}'
-        if action is None:
-            action = nf.endpoint.split('/')
-            action.insert(-1, 'c')
-            action = '/'.join(action)
         self.action = action
     
     def _format_stats(self, logs):
