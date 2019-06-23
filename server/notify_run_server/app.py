@@ -1,6 +1,6 @@
 from io import BytesIO
 
-from flask import Flask, Response, jsonify, request
+from flask import Flask, Response, jsonify, request, redirect
 from flask_cors import CORS
 from pyqrcode import QRCode
 
@@ -43,11 +43,11 @@ else:
 
 
 def channel_page_url(channel_id):
-    return (WEB_SERVER or request.host) + '/c/' + channel_id
+    return (WEB_SERVER or request.url_root[:-1]) + '/c/' + channel_id
 
 
 def channel_endpoint(channel_id):
-    return (API_SERVER or request.host) + '/' + channel_id
+    return (API_SERVER or request.url_root[:-1]) + '/' + channel_id
 
 
 def qr_for_channel(channel_id):
@@ -98,6 +98,11 @@ def info(channel_id):
 
 
 @app.route('/<chid:channel_id>', methods=['GET'])
+def redirect_channel(channel_id):
+    return redirect(channel_page_url(channel_id))
+
+
+@app.route('/<chid:channel_id>/json', methods=['GET'])
 def get_channel(channel_id):
     try:
         channel = model.get_channel(channel_id)

@@ -33,7 +33,7 @@ export namespace NotifyAPI {
     }
 
     export function fetchChannel(channelId: string): Promise<ChannelResponse> {
-        return request(`/${channelId}`);
+        return request(`/${channelId}/json`);
     }
 
     export function getURLOfQR(channelId: string): string {
