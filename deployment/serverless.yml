@@ -7,7 +7,6 @@ package:
 plugins:
   - serverless-python-requirements
   - serverless-wsgi
-
 custom:
   messageTableName: 'message-table-${self:provider.stage}'
   channelTableName: 'channel-table-${self:provider.stage}'

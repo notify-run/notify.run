@@ -7,10 +7,10 @@
   "license": "MIT",
   "devDependencies": {
     "serverless-python-requirements": "^3.3.1",
-    "serverless-wsgi": "^1.5.0"
+    "serverless-wsgi": "^1.7.2"
   },
   "dependencies": {
     "node-pre-gyp": "^0.10.3",
-    "serverless": "^1.42.2"
+    "serverless": "^1.45.1"
   }
 }
