@@ -7,8 +7,8 @@ def readme():
 
 
 setup(name='notify-run-server',
-      version='0.0.4',
-      python_requires='>=3.6',
+      version='0.0.5',
+      python_requires='>=3.5',
       description='Server for self-hosted notify.run server.',
       long_description=readme(),
       author='Paul Butler',
