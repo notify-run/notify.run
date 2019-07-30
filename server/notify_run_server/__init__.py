@@ -1,1 +1,0 @@
-from notify_run_server.app import app
