@@ -7,7 +7,7 @@ def readme():
 
 
 setup(name='notify-run',
-      version='0.0.12',
+      version='0.0.13',
       python_requires='>=2.7',
       description='Client for notify.run notifications.',
       long_description=readme(),
@@ -22,6 +22,6 @@ setup(name='notify-run',
       },
       install_requires=[
           'PyQRCode==1.2.1',
-          'requests==2.20.0',
+          'requests==2.22.0',
       ],
       )
