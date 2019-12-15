@@ -36,7 +36,7 @@ You will then be presented with a link that you can open on the devices
 you wish to subscribe to the channel. A QR code encoding the link is also
 provided for convinience.
 
-.. image:: screenshots/register.png
+.. image:: https://raw.githubusercontent.com/notify-run/notify.run/master/py_client/screenshots/register.png
    :width: 490px
    :height: 453px
    :alt: Registering from the command line.
@@ -78,4 +78,7 @@ The ``notify.register()`` and ``notify.info()`` commands return an ``EndpointInf
 When rendered in a terminal, this prints the QR code in a terminal-friendly way. When used
 in a Jupyter notebook, it displays the QR code inline.
 
-.. image:: screenshots/notebook.png
+.. image:: https://raw.githubusercontent.com/notify-run/notify.run/master/py_client/screenshots/notebook.png
+   :width: 490px
+   :height: 453px
+   :alt: Inline QR Code in Jupyter Notebook
