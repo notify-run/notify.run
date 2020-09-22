@@ -74,6 +74,10 @@ The commands above can also be used through a Python interface::
     notify.send('Hi there!')
     notify.send('Click to open notify.run!', 'https://notify.run')
 
+To connect to a channel you have already created, pass it as the `endpoint` parameter to `Notify()`:
+
+    notify = Notify(endpoint="https://notify.run/<channel_id>")
+
 The ``notify.register()`` and ``notify.info()`` commands return an ``EndpointInfo`` object.
 When rendered in a terminal, this prints the QR code in a terminal-friendly way. When used
 in a Jupyter notebook, it displays the QR code inline.
