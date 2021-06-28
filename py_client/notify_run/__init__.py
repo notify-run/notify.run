@@ -1,5 +1,7 @@
+from __future__ import print_function
 from os import environ, makedirs
 from os.path import expanduser, dirname
+from sys import stderr
 import json
 import requests
 from pyqrcode import QRCode
@@ -105,10 +107,20 @@ class Notify:
 
     # Commands
 
-    def send(self, message, action=None):
+    def send(self, message, action=None, failsafe=True):
         if self.endpoint is None:
-            raise NotConfigured()
-        requests.post(self.endpoint, {'message': message, 'action': action})
+            if failsafe:
+                print('Could not send notification because endpoint is not configured.', file=stderr)
+                return
+            else:
+                raise NotConfigured()
+        try:
+            requests.post(self.endpoint, {'message': message, 'action': action})
+        except Exception as e:
+            if failsafe:
+                print(f'Error sending notification: {e}', file=stderr)
+            else:
+                raise
 
     def info(self):
         if self.endpoint is None:

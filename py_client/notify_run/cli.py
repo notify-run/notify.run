@@ -35,7 +35,7 @@ def register(notify, force):
 
 
 def send(notify, message, action):
-    notify.send(message, action)
+    notify.send(message, action, failsafe=False)
 
 
 def main():
