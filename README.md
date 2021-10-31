@@ -11,4 +11,5 @@ This repository contains the source code for the Python client, website, and ser
 
 - **If you are interested in using the public instance of notify.run to send notifications to yourself, you don’t need to download anything from this repo.** Just follow the instructions at [notify.run](https://notify.run).
 - If you are interested in using the Python client to send notifications via notify.run, see [py_client/README.rst](py_client/README.rst).
-- If you are interested in self-hosting your own notify.run server, see [notify-run-server](https://github.com/notify-run/notify-run-server).
+
+The [notify.run server](https://github.com/notify-run/notify-run-rs) is open-source and MIT licensed, but support for self-hosting is a low priority use case.
