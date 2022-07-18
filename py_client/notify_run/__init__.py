@@ -146,3 +146,7 @@ class Notify:
         self.endpoint = r['endpoint']
         self.write_config()
         return EndpointInfo(r)
+    
+    @property
+    def is_registered(self):
+        return self.endpoint is not None
