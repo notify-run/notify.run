@@ -22,6 +22,6 @@ setup(name='notify-run',
       },
       install_requires=[
           'PyQRCode==1.2.1',
-          'requests==2.28.1',
+          'requests==2.31.0',
       ],
       )
